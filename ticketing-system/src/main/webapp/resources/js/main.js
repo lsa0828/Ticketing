@@ -3,7 +3,7 @@ const concertsPerPage = 3;
 let concerts = concertsData;
 let totalPages = Math.ceil(concerts.length / concertsPerPage);
 
-const container = document.getElementById("concert-list");
+const concertContainer = document.getElementById("concert-list");
 const pageDots = document.getElementById('page-dots');
 const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');
@@ -33,7 +33,7 @@ function render(page) {
     }
     html += `</div>`;
 
-    container.innerHTML = html;
+    concertContainer.innerHTML = html;
 
     document.querySelectorAll('.page-dots .dot').forEach((dot, idx) => {
         dot.classList.toggle('active', idx === page);

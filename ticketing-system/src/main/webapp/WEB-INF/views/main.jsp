@@ -4,11 +4,13 @@
 <html>
 <head>
     <title>Ticketing</title>
-    <link rel="stylesheet" href="<c:url value='/resources/css/concert.css' />">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="<c:url value='/resources/css/layout.css' />">
+    <link rel="stylesheet" href="<c:url value='/resources/css/main.css' />">
 </head>
 <body>
-    <h1>Concert Ticketing</h1>
-    <div class="concert-container">
+    <%@ include file="/WEB-INF/views/common/header.jspf" %>
+    <div class="main-container">
         <div class="concert-wrapper">
             <button id="prev" class="arrow prev disabled">&#9664;</button>
             <div id="concert-list" class="concert-list"></div>
@@ -24,6 +26,6 @@
             </c:forEach>
         ];
     </script>
-    <script src="<c:url value='/resources/js/concert.js' />"></script>
+    <script src="<c:url value='/resources/js/main.js' />"></script>
 </body>
 </html>

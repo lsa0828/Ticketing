@@ -15,6 +15,7 @@
     <context:component-scan base-package="org.example.controller" />
     <context:component-scan base-package="org.example.service" />
     <context:component-scan base-package="org.example.dao" />
+    <context:component-scan base-package="org.example.interceptor" />
 
     <!-- JSP ViewResolver setting -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -27,4 +28,11 @@
 
     <!-- resources mapping -->
     <mvc:resources mapping="/resources/**" location="/resources/" />
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/secure/**"/>
+            <ref bean="loginInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

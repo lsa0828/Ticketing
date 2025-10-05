@@ -16,9 +16,9 @@ public class MainController {
     private ConcertService concertService;
 
     @GetMapping("/")
-    public String concert(Model model) {
+    public String mainPage(Model model) {
         List<Concert> concerts = concertService.getAllConcerts();
         model.addAttribute("concerts", concerts);
-        return "concert";
+        return "main";
     }
 }

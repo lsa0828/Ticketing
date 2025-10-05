@@ -1,29 +1,3 @@
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    background-color: #6D94C5;
-}
-h1 {
-    margin: 20px 10px;
-    color: #CBDCEB;
-}
-.concert-container {
-    width: 80%;
-    height: 80%;
-    margin: auto;
-    background-color: white;
-    border-radius: 30px;
-}
-@media (max-width: 1150px) {
-    .concert-container {
-        width: 90%;
-        height: 80%;
-        border-radius: 20px;
-    }
-}
-
 .concert-wrapper {
     display: flex;
     justify-content: center;
