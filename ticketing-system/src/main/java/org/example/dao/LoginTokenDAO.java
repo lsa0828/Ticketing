@@ -37,4 +37,9 @@ public class LoginTokenDAO {
         String sql = "DELETE FROM login_tokens WHERE token = ?";
         jdbcTemplate.update(sql, token);
     }
+
+    public int deleteExpiredTokens() {
+        String sql = "DELETE FROM login_tokens WHERE expiry < NOW()";
+        return jdbcTemplate.update(sql);
+    }
 }

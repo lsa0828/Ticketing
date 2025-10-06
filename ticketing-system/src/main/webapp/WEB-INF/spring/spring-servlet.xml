@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="
             http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -16,6 +16,7 @@
     <context:component-scan base-package="org.example.service" />
     <context:component-scan base-package="org.example.dao" />
     <context:component-scan base-package="org.example.interceptor" />
+    <context:component-scan base-package="org.example.scheduler" />
 
     <!-- JSP ViewResolver setting -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -31,8 +32,15 @@
 
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/secure/**"/>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/"/>
+            <mvc:exclude-mapping path="/login"/>
+            <mvc:exclude-mapping path="/register"/>
+            <mvc:exclude-mapping path="/resources/**"/>
             <ref bean="loginInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>
+
+    <!-- Scheduler activation -->
+    <task:annotation-driven />
 </beans>

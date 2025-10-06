@@ -35,7 +35,7 @@ public class AuthController {
 
         if (rememberMe != null) {
             String token = memberService.createLoginToken(id);
-            CookieUtil.addCookie(response, "loginToken", token, 7 * 24 * 60 *60);
+            CookieUtil.addCookie(response, "loginToken", token, 24 * 60 *60);
         }
 
         return "redirect:/";

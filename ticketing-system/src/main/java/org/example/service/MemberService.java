@@ -37,14 +37,16 @@ public class MemberService {
 
     public String createLoginToken(String memberId) {
         String token = TokenUtil.generateToken();
-        LocalDateTime expiry = LocalDateTime.now().plusDays(7);
+        LocalDateTime expiry = LocalDateTime.now().plusDays(1);
         loginTokenDAO.save(token, memberId, expiry);
         return token;
     }
 
     public Member validateToken(String token) {
         try {
-            return loginTokenDAO.findMemberByToken(token);
+            Member member = loginTokenDAO.findMemberByToken(token);
+            member.setPassword(null);
+            return member;
         } catch (Exception e) {
             return null;
         }
@@ -52,5 +54,9 @@ public class MemberService {
 
     public void deleteToken(String token) {
         loginTokenDAO.deleteByToken(token);
+    }
+
+    public int deleteExpiredTokens() {
+        return loginTokenDAO.deleteExpiredTokens();
     }
 }
