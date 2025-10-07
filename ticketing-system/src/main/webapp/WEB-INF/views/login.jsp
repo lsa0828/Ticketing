@@ -12,24 +12,26 @@
     <%@ include file="/WEB-INF/views/common/header.jspf" %>
     <div class="main-container">
         <p class="form-title">로그인</p>
-
         <div class="form-container">
             <form action="${contextPath}/login" method="post">
-                <label for="id">아이디</label>
-                <input type="text" id="id" name="id" required />
+                <div class="form-row">
+                    <label for="id">아이디</label>
+                    <input type="text" id="id" name="id" required />
+                </div>
 
-                <label for="password">비밀번호</label>
-                <input type="password" id="password" name="password" required />
+                <div class="form-row">
+                    <label for="password">비밀번호</label>
+                    <input type="password" id="password" name="password" required />
+                </div>
 
-                <label>
-                    <input type="checkbox" name="rememberMe" />
-                </label>
+                <div class="form-checkbox">
+                    <label for="rememberMe">Remember me?</label>
+                    <input type="checkbox" id="rememberMe" name="rememberMe" />
+                </div>
 
                 <button type="submit">로그인</button>
 
-                <c:if test="${param.error eq 'true'}">
-                    <p class="error">아이디 또는 비밀번호가 올바르지 않습니다.</p>
-                </c:if>
+                <p class="error ${param.error eq 'true' ? 'visible' : 'hidden'}">아이디 또는 비밀번호가 올바르지 않습니다.</p>
             </form>
         </div>
 

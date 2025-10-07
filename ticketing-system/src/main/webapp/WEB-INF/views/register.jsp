@@ -3,7 +3,7 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <html>
 <head>
-    <title>Login</title>
+    <title>Sign up</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="<c:url value='/resources/css/layout.css' />">
     <link rel="stylesheet" href="<c:url value='/resources/css/auth-form.css' />">
@@ -15,11 +15,15 @@
 
         <div class="form-container">
             <form action="${contextPath}/register" method="post">
-                <label for="id">아이디</label>
-                <input type="text" id="id" name="id" required />
+                <div class="form-row">
+                    <label for="id">아이디</label>
+                    <input type="text" id="id" name="id" required />
+                </div>
 
-                <label for="password">비밀번호</label>
-                <input type="password" id="password" name="password" required />
+                <div class="form-row">
+                    <label for="password">비밀번호</label>
+                    <input type="password" id="password" name="password" required />
+                </div>
 
                 <button type="submit">회원가입</button>
             </form>
