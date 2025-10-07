@@ -18,19 +18,19 @@ public class MemberService {
     @Autowired
     private LoginTokenDAO loginTokenDAO;
 
-    public void register(String id, String plainPassword) {
+    public void register(String name, String plainPassword) {
         String salt = BCrypt.gensalt();
         String password = BCrypt.hashpw(plainPassword, salt);
         Member member = new Member();
-        member.setId(id);
+        member.setName(name);
         member.setPassword(password);
         memberDAO.save(member);
     }
 
-    public MemberResponseDTO login(String id, String plainPassword) {
-        Member member = memberDAO.findById(id);
+    public MemberResponseDTO login(String name, String plainPassword) {
+        Member member = memberDAO.findByName(name);
         if (member != null && BCrypt.checkpw(plainPassword, member.getPassword())) {
-            return new MemberResponseDTO(member.getId(), member.getRole());
+            return new MemberResponseDTO(member.getId(), member.getName(), member.getRole());
         }
         return null;
     }
@@ -45,7 +45,7 @@ public class MemberService {
     public MemberResponseDTO validateToken(String token) {
         try {
             Member member = loginTokenDAO.findMemberByToken(token);
-            return new MemberResponseDTO(member.getId(), member.getRole());
+            return new MemberResponseDTO(member.getId(), member.getName(), member.getRole());
         } catch (Exception e) {
             return null;
         }
@@ -59,7 +59,7 @@ public class MemberService {
         return loginTokenDAO.deleteExpiredTokens();
     }
 
-    public boolean isIdExists(String id) {
-        return memberDAO.countById(id) > 0;
+    public boolean isIdExists(String name) {
+        return memberDAO.countByName(name) > 0;
     }
 }

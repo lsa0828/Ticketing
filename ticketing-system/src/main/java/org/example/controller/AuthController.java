@@ -36,16 +36,16 @@ public class AuthController {
     @PostMapping("/login")
     public String login(MemberDTO memberDTO, @RequestParam(name = "rememberMe", required = false) String rememberMe,
                         HttpSession session, HttpServletResponse response) {
-        if (memberDTO.getId() == null || memberDTO.getPassword() == null) {
+        if (memberDTO.getName() == null || memberDTO.getPassword() == null) {
             return "redirect:/login?error=true";
         }
-        MemberResponseDTO member = memberService.login(memberDTO.getId(), memberDTO.getPassword());
+        MemberResponseDTO member = memberService.login(memberDTO.getName(), memberDTO.getPassword());
         if (member == null) return "redirect:/login?error=true";
 
         session.setAttribute("loginMember", member);
 
         if (rememberMe != null) {
-            String token = memberService.createLoginToken(member.getId());
+            String token = memberService.createLoginToken(member.getName());
             CookieUtil.addCookie(response, "loginToken", token, 24 * 60 *60);
         }
 
@@ -70,7 +70,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(MemberDTO memberDTO, @RequestParam("passwordConfirm") String passwordConfirm, Model model) {
-        if (memberDTO.getId() == null || memberDTO.getPassword() == null || passwordConfirm == null) {
+        if (memberDTO.getName() == null || memberDTO.getPassword() == null || passwordConfirm == null) {
             model.addAttribute("error", "입력되지 않은 항목이 있습니다.");
             return "register";
         }
@@ -80,13 +80,13 @@ public class AuthController {
             return "register";
         }
 
-        boolean exists = memberService.isIdExists(memberDTO.getId());
+        boolean exists = memberService.isIdExists(memberDTO.getName());
         if (exists) {
             model.addAttribute("error", "이미 존재하는 아이디입니다.");
             return "register";
         }
 
-        memberService.register(memberDTO.getId(), memberDTO.getPassword());
+        memberService.register(memberDTO.getName(), memberDTO.getPassword());
         return "redirect:/login";
     }
 }

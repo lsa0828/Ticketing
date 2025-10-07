@@ -25,7 +25,7 @@ public class ConcertDAO {
         @Override
         public Concert mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Concert(
-                    rs.getInt("id"),
+                    rs.getLong("id"),
                     rs.getString("title"),
                     rs.getString("image_url")
             );

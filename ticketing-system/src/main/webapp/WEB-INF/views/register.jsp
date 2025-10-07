@@ -16,8 +16,8 @@
         <div class="form-container">
             <form action="${contextPath}/register" method="post">
                 <div class="form-row">
-                    <label for="id">아이디</label>
-                    <input type="text" id="id" name="id" required />
+                    <label for="name">아이디</label>
+                    <input type="text" id="name" name="name" required />
                 </div>
 
                 <div class="form-row">

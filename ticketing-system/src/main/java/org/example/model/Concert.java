@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class Concert {
-    private int id;
+    private Long id;
     private String title;
     private String imageUrl;
 }

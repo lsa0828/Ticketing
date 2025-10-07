@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class MemberResponseDTO {
-    String id;
-    String role;
+    private Long id;
+    private String name;
+    private String role;
 }

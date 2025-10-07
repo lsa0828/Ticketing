@@ -4,6 +4,8 @@ body {
     margin: 0;
     padding: 0;
     background-color: #6D94C5;
+
+    min-height: 100vh; /* 화면 전체 높이 */
 }
 
 header {
@@ -42,10 +44,16 @@ header h1 a {
 
 .main-container {
     width: 80%;
-    height: 80%;
-    margin: auto;
+    margin: 0 auto 30px auto;
     background-color: white;
     border-radius: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 760px;
 }
 @media (max-width: 1150px) {
     .main-container, header {

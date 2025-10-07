@@ -16,30 +16,31 @@ public class MemberDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public Member findById(String id) {
-        String sql = "SELECT id, password, role FROM members WHERE id = ?";
+    public Member findByName(String name) {
+        String sql = "SELECT id, name, password, role FROM members WHERE name = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, new MemberRowMapper(), id);
+            return jdbcTemplate.queryForObject(sql, new MemberRowMapper(), name);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
 
     public void save(Member member) {
-        String sql = "INSERT INTO members (id, password) VALUES (?, ?)";
+        String sql = "INSERT INTO members (name, password) VALUES (?, ?)";
         jdbcTemplate.update(sql, member.getId(), member.getPassword());
     }
 
-    public int countById(String id) {
-        String sql = "SELECT COUNT(*) FROM members WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, Integer.class, id);
+    public int countByName(String name) {
+        String sql = "SELECT COUNT(*) FROM members WHERE name = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, name);
     }
 
     private static class MemberRowMapper implements RowMapper<Member> {
         @Override
         public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Member(
-                    rs.getString("id"),
+                    rs.getLong("id"),
+                    rs.getString("name"),
                     rs.getString("password"),
                     rs.getString("role")
             );

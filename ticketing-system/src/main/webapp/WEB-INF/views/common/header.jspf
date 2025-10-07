@@ -6,7 +6,7 @@
         <c:if test="${currentPage != 'login' and currentPage != 'register'}">
             <c:choose>
                 <c:when test="${not empty sessionScope.loginMember}">
-                    <span>${sessionScope.loginMember.id}님</span>
+                    <span>${sessionScope.loginMember.name}님</span>
                     <a href="${contextPath}/logout">로그아웃</a>
                 </c:when>
                 <c:otherwise>
