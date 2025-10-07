@@ -25,7 +25,14 @@
                     <input type="password" id="password" name="password" required />
                 </div>
 
+                <div class="form-row">
+                    <label for="passwordConfirm">비밀번호 확인</label>
+                    <input type="password" id="passwordConfirm" name="passwordConfirm" required />
+                </div>
+
                 <button type="submit">회원가입</button>
+
+                <p class="error ${not empty error ? 'visible' : 'hidden'}">${error}</p>
             </form>
         </div>
 

@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.dao.LoginTokenDAO;
 import org.example.dao.MemberDAO;
+import org.example.dto.MemberResponseDTO;
 import org.example.model.Member;
 import org.example.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,10 @@ public class MemberService {
         memberDAO.save(member);
     }
 
-    public Member login(String id, String plainPassword) {
+    public MemberResponseDTO login(String id, String plainPassword) {
         Member member = memberDAO.findById(id);
         if (member != null && BCrypt.checkpw(plainPassword, member.getPassword())) {
-            member.setPassword(null);
-            return member;
+            return new MemberResponseDTO(member.getId(), member.getRole());
         }
         return null;
     }
@@ -42,11 +42,10 @@ public class MemberService {
         return token;
     }
 
-    public Member validateToken(String token) {
+    public MemberResponseDTO validateToken(String token) {
         try {
             Member member = loginTokenDAO.findMemberByToken(token);
-            member.setPassword(null);
-            return member;
+            return new MemberResponseDTO(member.getId(), member.getRole());
         } catch (Exception e) {
             return null;
         }
@@ -58,5 +57,9 @@ public class MemberService {
 
     public int deleteExpiredTokens() {
         return loginTokenDAO.deleteExpiredTokens();
+    }
+
+    public boolean isIdExists(String id) {
+        return memberDAO.countById(id) > 0;
     }
 }

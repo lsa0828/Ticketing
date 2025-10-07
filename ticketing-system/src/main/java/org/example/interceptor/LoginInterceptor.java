@@ -3,6 +3,7 @@ package org.example.interceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.example.dto.MemberResponseDTO;
 import org.example.model.Member;
 import org.example.service.MemberService;
 import org.example.util.CookieUtil;
@@ -24,7 +25,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         String token = CookieUtil.getCookie(request, "loginToken");
         if (token != null) {
-            Member member = memberService.validateToken(token);
+            MemberResponseDTO member = memberService.validateToken(token);
             if (member != null) {
                 request.getSession(true).setAttribute("loginMember", member);
                 return true;
