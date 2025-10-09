@@ -19,13 +19,17 @@ public class LoginTokenDAO {
     }
 
     public Member findMemberByToken(String token) {
-        String sql = "SELECT m.id, m.password, m.role FROM members m" +
-                "JOIN login_tokens t ON m.id = t.member_id" +
+        String sql = "SELECT * FROM members m " +
+                "JOIN login_tokens t ON m.id = t.member_id " +
                 "WHERE t.token = ? AND t.expiry > NOW()";
         try {
             return jdbcTemplate.queryForObject(sql, (rs, rowNum) ->
-                    new Member(rs.getString("id"), rs.getString("password"),
-                            rs.getString("role")),
+                    new Member(
+                            rs.getLong("id"),
+                            rs.getString("name"),
+                            rs.getString("password"),
+                            rs.getString("role")
+                    ),
                     token
             );
         } catch (Exception e) {

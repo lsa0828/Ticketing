@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class Concert {
+public class Venue {
     private Long id;
-    private Long venueId;
-    private String title;
-    private String imageUrl;
+    private String name;
 }

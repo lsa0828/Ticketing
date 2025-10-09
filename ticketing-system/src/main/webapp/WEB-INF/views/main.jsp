@@ -22,10 +22,13 @@
     <script>
         const concertsData = [
             <c:forEach var="c" items="${concerts}">
-                {id:${c.id}, title:"${c.title}", imageUrl:"${contextPath}"+"${c.imageUrl}"},
+                {id:${c.concertId}, title:"${c.title}", imageUrl:"${contextPath}${c.imageUrl}", soldCount:${c.soldCount}, totalCount:${c.totalCount}},
             </c:forEach>
         ];
+        const contextPath = "${contextPath}";
+        const isLoggedIn = ${sessionScope.loginMember != null ? 'true' : 'false'};
     </script>
     <script src="<c:url value='/resources/js/main.js' />"></script>
+    <script src="<c:url value='/resources/js/loginConfirm.js' />"></script>
 </body>
 </html>

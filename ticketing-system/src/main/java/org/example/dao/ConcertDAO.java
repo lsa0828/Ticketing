@@ -17,8 +17,13 @@ public class ConcertDAO {
     private JdbcTemplate jdbcTemplate;
 
     public List<Concert> findAll() {
-        String sql = "SELECT id, title, image_url FROM concerts";
+        String sql = "SELECT * FROM concerts";
         return jdbcTemplate.query(sql, new ConcertRowMapper());
+    }
+
+    public Concert findById(Long id) {
+        String sql = "SELECT * FROM concerts WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new ConcertRowMapper(), id);
     }
 
     private static class ConcertRowMapper implements RowMapper<Concert> {
@@ -26,6 +31,7 @@ public class ConcertDAO {
         public Concert mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Concert(
                     rs.getLong("id"),
+                    rs.getLong("venue_id"),
                     rs.getString("title"),
                     rs.getString("image_url")
             );

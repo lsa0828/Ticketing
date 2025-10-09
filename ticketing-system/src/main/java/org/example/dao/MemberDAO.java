@@ -17,7 +17,7 @@ public class MemberDAO {
     private JdbcTemplate jdbcTemplate;
 
     public Member findByName(String name) {
-        String sql = "SELECT id, name, password, role FROM members WHERE name = ?";
+        String sql = "SELECT * FROM members WHERE name = ?";
         try {
             return jdbcTemplate.queryForObject(sql, new MemberRowMapper(), name);
         } catch (EmptyResultDataAccessException e) {
@@ -27,7 +27,7 @@ public class MemberDAO {
 
     public void save(Member member) {
         String sql = "INSERT INTO members (name, password) VALUES (?, ?)";
-        jdbcTemplate.update(sql, member.getId(), member.getPassword());
+        jdbcTemplate.update(sql, member.getName(), member.getPassword());
     }
 
     public int countByName(String name) {

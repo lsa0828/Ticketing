@@ -33,11 +33,11 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
 
         String uri = request.getRequestURI();
-        if (uri.equals("/login") || uri.equals("/register")) {
+        if (uri.equals(request.getContextPath() + "/login") || uri.equals(request.getContextPath() + "/register")) {
             return true;
         }
 
-        response.sendRedirect("/login");
+        response.sendRedirect(request.getContextPath() + "/login");
         return false;
     }
 }
