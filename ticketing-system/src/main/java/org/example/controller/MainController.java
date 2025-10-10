@@ -1,6 +1,6 @@
 package org.example.controller;
 
-import org.example.dto.ConcertSeatStatusCountDTO;
+import org.example.dto.ConcertSeatCountDTO;
 import org.example.service.ConcertService;
 import org.example.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class MainController {
 
     @GetMapping("/")
     public String mainPage(Model model) {
-        List<ConcertSeatStatusCountDTO> concerts = concertService.getAllConcertsStatusCount();
+        List<ConcertSeatCountDTO> concerts = concertService.getAllConcertSeatCount();
         model.addAttribute("concerts", concerts);
         return "main";
     }

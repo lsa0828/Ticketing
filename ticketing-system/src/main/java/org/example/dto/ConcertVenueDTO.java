@@ -7,11 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ConcertSeatStatusCountDTO {
-    private Long concertId;
-    private Long venueId;
+public class ConcertVenueDTO {
+    private Long id;
+    private String venueName;
     private String title;
     private String imageUrl;
-    private int soldCount;
-    private int totalCount;
 }

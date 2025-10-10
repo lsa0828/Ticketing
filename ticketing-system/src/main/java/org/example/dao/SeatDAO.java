@@ -1,5 +1,6 @@
 package org.example.dao;
 
+import org.example.dto.CurrentSeatDTO;
 import org.example.model.Seat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,14 +16,23 @@ public class SeatDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public List<Seat> findByConcertId(Long concertId) {
-        String sql = "SELECT s.* FROM seats s JOIN concerts c ON s.venue_id = c.venue_id WHERE c.id = ?";
-        return jdbcTemplate.query(sql, new SeatRowMapper(), concertId);
-    }
-
-    public List<Seat> findByVenueId(Long venueId) {
-        String sql = "SELECT * FROM seats WHERE venue_id = ?";
-        return jdbcTemplate.query(sql, new SeatRowMapper(), venueId);
+    public List<CurrentSeatDTO> findCurrentSeatsByConcertId(Long concertId) {
+        String sql = "SELECT s.id AS seat_id, c.id AS concert_id, s.section, s.number, s.pos_x, s.pos_y, COALESCE(r.status, 'AVAILABLE') AS status "
+                + "FROM seats s JOIN concerts c ON s.venue_id = c.venue_id "
+                + "LEFT JOIN seat_reservations r ON r.concert_id = c.id AND r.seat_id = s.id "
+                + "WHERE c.id = ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                new CurrentSeatDTO(
+                        rs.getLong("seat_id"),
+                        rs.getLong("concert_id"),
+                        rs.getString("section"),
+                        rs.getInt("number"),
+                        rs.getInt("pos_x"),
+                        rs.getInt("pos_y"),
+                        rs.getString("status")
+                ),
+                concertId
+        );
     }
 
     private static class SeatRowMapper implements RowMapper<Seat> {
