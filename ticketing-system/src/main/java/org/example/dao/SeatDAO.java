@@ -1,5 +1,6 @@
 package org.example.dao;
 
+import org.example.dto.CurrentReservationDTO;
 import org.example.dto.CurrentSeatDTO;
 import org.example.model.Seat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -32,6 +34,24 @@ public class SeatDAO {
                         rs.getString("status")
                 ),
                 concertId
+        );
+    }
+
+    public CurrentReservationDTO findCurrentSeatBySeatIdAndConcertId(Long seatId, Long concertId) {
+        String sql = "SELECT sr.seat_id, sr.concert_id, sr.member_id, s.section, s.number, sr.status, sr.expires_at "
+                + "FROM seat_reservations sr JOIN seats s ON sr.seat_id = s.id "
+                + "WHERE sr.seat_id = ? AND sr.concert_id = ?";
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) ->
+                new CurrentReservationDTO(
+                        rs.getLong("seat_id"),
+                        rs.getLong("concert_id"),
+                        rs.getLong("member_id"),
+                        rs.getString("section"),
+                        rs.getInt("number"),
+                        rs.getString("status"),
+                        rs.getObject("expires_at", LocalDateTime.class)
+                ),
+                seatId, concertId
         );
     }
 
