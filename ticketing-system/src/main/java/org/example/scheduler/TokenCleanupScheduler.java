@@ -11,9 +11,9 @@ public class TokenCleanupScheduler {
     @Autowired
     private MemberService memberService;
 
-    @Scheduled(fixedRate = 3600000) // 1시간마다 실행
+    @Scheduled(fixedRate = 60 * 60 * 1000) // 1시간마다 실행
     public void deleteExpiredTokens() {
         int deletedCount = memberService.deleteExpiredTokens();
-        System.out.println("[Scheduler] 만료된 토큰 " + deletedCount + "개 삭제 완료");
+        System.out.println("[Scheduler] " + deletedCount + "expired token deleted complete.");
     }
 }

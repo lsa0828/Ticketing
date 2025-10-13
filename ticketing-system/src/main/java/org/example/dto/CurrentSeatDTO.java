@@ -15,4 +15,5 @@ public class CurrentSeatDTO {
     private int posX;
     private int posY;
     private String status;
+    private int price;
 }

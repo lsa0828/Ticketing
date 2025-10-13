@@ -35,7 +35,7 @@ public class MemberService {
         return null;
     }
 
-    public String createLoginToken(String memberId) {
+    public String createLoginToken(Long memberId) {
         String token = TokenUtil.generateToken();
         LocalDateTime expiry = LocalDateTime.now().plusDays(1);
         loginTokenDAO.save(token, memberId, expiry);

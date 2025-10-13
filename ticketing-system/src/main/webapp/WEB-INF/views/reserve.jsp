@@ -22,8 +22,21 @@
                 <p class="seat-inform">${seat.section}열 ${seat.number}</p>
             </div>
             <div class="pay-container">
+                <p class="price">${seat.price}</p>
+                <button class="pay-btn" disabled>결제하기</div>
             </div>
         </div>
     </div>
+
+    <script>
+        payMethod = true;
+        document.querySelector('.pay-btn').addEventListener('click', () => {
+            if (!payMethod) {
+                alert('결제 방법을 선택해주세요.');
+                return;
+            }
+            window.location.href = `${contextPath}/pay?seatId=\${seat.id}&concertId=\${concert.id}`;
+        });
+    </script>
 </body>
 </html>

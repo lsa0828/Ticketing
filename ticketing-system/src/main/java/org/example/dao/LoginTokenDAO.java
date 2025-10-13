@@ -13,7 +13,7 @@ public class LoginTokenDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public void save(String token, String memberId, LocalDateTime expiry) {
+    public void save(String token, Long memberId, LocalDateTime expiry) {
         String sql = "INSERT INTO login_tokens (token, member_id, expiry) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, token, memberId, Timestamp.valueOf(expiry));
     }

@@ -20,7 +20,7 @@
                         <c:forEach var="s" items="${seats}">
                             <div class="seat ${s.status eq 'AVAILABLE' ? 'available' : 'sold'}"
                                     style="left: ${s.posX}px; top: ${s.posY}px;"
-                                    data-seat-id="${s.seatId}" data-concert-id="${s.concertId}">
+                                    data-seat-id="${s.seatId}" data-concert-id="${s.concertId}" data-price="${s.price}">
                                 ${s.section}${s.number}
                             </div>
                         </c:forEach>
@@ -31,6 +31,10 @@
                 <img src="${contextPath}${concert.imageUrl}" alt="${concert.title}">
                 <p class="concert-title">${concert.title}</p>
                 <p class="concert-venue">[${concert.venueName}]</p>
+                <div class="price-container">
+                    <p class="price-title">결제 금액</p>
+                    <p class="price">0원</p>
+                </div>
                 <button class="book-btn" disabled>예매하기</button>
             </div>
         </div>
@@ -47,9 +51,13 @@
                     selectedSeat = seat;
                     seat.classList.add('selected');
                     document.querySelector('.book-btn').disabled = false;
+
+                    const price = parseInt(seat.dataset.price, 10);
+                    document.querySelector('.price').textContent = price.toLocaleString() + '원';
                 } else {
                     selectedSeat = null;
                     document.querySelector('.book-btn').disabled = true;
+                    document.querySelector('.price').textContent = '0원';
                 }
             });
         });
@@ -64,5 +72,10 @@
             window.location.href = `${contextPath}/reserve?seatId=\${seatId}&concertId=\${concertId}`;
         });
     </script>
+    <c:if test="${not empty error}">
+        <script>
+            alert("${error}");
+        </script>
+    </c:if>
 </body>
 </html>

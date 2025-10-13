@@ -45,7 +45,7 @@ public class AuthController {
         session.setAttribute("loginMember", member);
 
         if (rememberMe != null) {
-            String token = memberService.createLoginToken(member.getName());
+            String token = memberService.createLoginToken(member.getId());
             CookieUtil.addCookie(response, "loginToken", token, 24 * 60 *60);
         }
 

@@ -11,6 +11,5 @@ public class SeatDTO {
     private Long id;
     private String section;
     private int number;
-    private int posX;
-    private int posY;
+    private int price;
 }

@@ -1,29 +1,30 @@
 package org.example.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.dao.SeatDAO;
-import org.example.dto.ConcertSeatDTO;
-import org.example.dto.CurrentReservationDTO;
+import org.example.dao.SeatReservationDAO;
+import org.example.dto.SeatDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
+@Slf4j
 @Service
 public class ReserveService {
     @Autowired
     private SeatDAO seatDAO;
+    @Autowired
+    private SeatReservationDAO seatReservationDAO;
 
-    public ConcertSeatDTO checkSeat(Long seatId, Long concertId, Long memberId) {
-        CurrentReservationDTO currentReservation = seatDAO.findCurrentSeatBySeatIdAndConcertId(seatId, concertId);
-        if (currentReservation.getStatus().equals("AVAILABLE") || (currentReservation.getStatus().equals("BOOKING") && currentReservation.getMemberId().equals(memberId) && currentReservation.getExpiresAt().isAfter(LocalDateTime.now()))) {
-            return new ConcertSeatDTO(
-                    currentReservation.getSeatId(),
-                    currentReservation.getConcertId(),
-                    currentReservation.getSection(),
-                    currentReservation.getNumber()
-            );
-        } else {
-            return null;
+    @Transactional(rollbackFor = Exception.class)
+    public SeatDTO updateSeatReservation(Long seatId, Long concertId, Long memberId) {
+        seatReservationDAO.releaseSeatForOtherMember(seatId, concertId, memberId);
+
+        int updated = seatReservationDAO.updateSeatToBooking(seatId, concertId, memberId);
+        if (updated == 0) {
+            throw new OptimisticLockingFailureException("Seat was modified by another user");
         }
+        return seatDAO.getSeat(seatId, concertId);
     }
 }
