@@ -1,0 +1,7 @@
+.pay-method {
+    padding: 15px;
+    border: 1px solid #ddd;
+}
+.pay-method.selected {
+    border: 1px solid #0046FF;
+}

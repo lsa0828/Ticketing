@@ -19,23 +19,79 @@
                 </div>
                 <p class="concert-title">${concert.title}</p>
                 <p class="concert-venue">${concert.venueName}</p>
-                <p class="seat-inform">${seat.section}열 ${seat.number}</p>
+                <div class="seat-container">
+                    <p class="seat-title">좌석</p>
+                    <p class="seat-inform">${seat.section}열 ${seat.number}</p>
+                </div>
+                <div class="price-container">
+                    <p class="price-title">총 결제 금액</p>
+                    <p class="price">${seat.price}</p>
+                </div>
             </div>
             <div class="pay-container">
-                <p class="price">${seat.price}</p>
-                <button class="pay-btn" disabled>결제하기</div>
+                <p>결제 방법 선택</p>
+                <div class="pay-selection">
+                    <button class="pay-method" data-pay-id="1">결제1</button>
+                    <button class="pay-method" data-pay-id="2">결제2</button>
+                </div>
+                <button class="pay-btn" disabled>결제하기</button>
             </div>
         </div>
     </div>
 
     <script>
-        payMethod = true;
+        selectedMethod = null;
+
+        document.querySelectorAll('.pay-method').forEach(method => {
+            method.addEventListener('click', () => {
+                if (selectedMethod) {
+                    selectedMethod.classList.remove('selected');
+                }
+                if (selectedMethod !== method) {
+                    selectedMethod = method;
+                    method.classList.add('selected');
+                    document.querySelector('.pay-btn').disabled = false;
+                } else {
+                    selectedMethod = null;
+                    document.querySelector('.pay-btn').disabled = true;
+                }
+            });
+        });
+
         document.querySelector('.pay-btn').addEventListener('click', () => {
-            if (!payMethod) {
+            if (!selectedMethod) {
                 alert('결제 방법을 선택해주세요.');
                 return;
             }
-            window.location.href = `${contextPath}/pay?seatId=\${seat.id}&concertId=\${concert.id}`;
+            const payId = selectedMethod.dataset.payId;
+            fetch(`${contextPath}/reserve`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    seatId: '${seat.id}',
+                    concertId: '${concert.id}',
+                    payId: payId
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw new Error(err.error || '서버 오류');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.reserveId) {
+                    window.location.href = `${contextPath}/reserve/complete?reserveId=\${data.reserveId}`;
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('결제 중 오류가 발생했습니다.');
+            });
         });
     </script>
 </body>

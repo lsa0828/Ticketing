@@ -26,11 +26,25 @@ public class SeatReservationDAO {
     public void releaseSeatForOtherMember(Long seatId, Long concertId, Long memberId) {
         String sql = "UPDATE seat_reservations "
                 + "SET status = 'AVAILABLE', member_id = NULL, booking_time = NULL, expires_at = NULL, version = version + 1 "
-                + "WHERE seat_id != ? AND concert_id = ? AND member_id = ?";
+                + "WHERE seat_id != ? AND concert_id = ? AND member_id = ? AND status = 'BOOKING'";
         int updated = jdbcTemplate.update(sql, seatId, concertId, memberId);
         if (updated > 0) {
             System.out.println("[SeatReleaseScheduler] Released " + updated + " expired seats.");
         }
+    }
+
+    public int releaseExpiredSeats() {
+        String sql = "UPDATE seat_reservations "
+                + "SET status = 'AVAILABLE', member_id = NULL, booking_time = NULL, expires_at = NULL, version = version + 1 "
+                + "WHERE status = 'BOOKING' AND expires_at < NOW()";
+        return jdbcTemplate.update(sql);
+    }
+
+    public int updateSeatToSold(Long concertId, Long seatId, Long memberId) {
+        String sql = "UPDATE seat_reservations "
+                + "SET status = 'SOLD' "
+                + "WHERE concert_id = ? AND seat_id = ? AND member_id = ? AND status = 'BOOKING' AND expires_at > NOW()";
+        return jdbcTemplate.update(sql, concertId, seatId, memberId);
     }
 
     /*public void releaseSeatForOtherMember(Long seatId, Long concertId, Long memberId) {
@@ -67,12 +81,5 @@ public class SeatReservationDAO {
                 concertId,
                 memberId
         );
-    }
-
-    public int releaseExpiredSeats() {
-        String sql = "UPDATE seat_reservations "
-                + "SET status = 'AVAILABLE', member_id = NULL, booking_time = NULL, expires_at = NULL, version = version + 1 "
-                + "WHERE status = 'BOOKING' AND expires_at < NOW()";
-        return jdbcTemplate.update(sql);
     }
 }
