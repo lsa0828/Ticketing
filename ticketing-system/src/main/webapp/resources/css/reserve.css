@@ -1,7 +1,171 @@
+.reserve-container {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.inform-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.img-container {
+    width: 15%;
+    aspect-ratio: 3 / 4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.inform {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+    margin-left: 15px;
+}
+
+.concert-title,
+.venue-container,
+.venue-title,
+.concert-venue,
+.seat-container,
+.seat-title,
+.seat-inform,
+.price-container,
+.price-title,
+.price {
+    margin: 0;
+}
+
+.concert-title {
+    font-size: 22px;
+    font-weight: bold;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.venue-container {
+    display: flex;
+    font-size: 18px;
+    font-weight: bold;
+    gap: 10px;
+}
+.venue-title {
+    color: #bbb;
+}
+.concert-venue {
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.seat-container {
+    display: flex;
+    font-size: 18px;
+    font-weight: bold;
+    gap: 10px;
+}
+.seat-title {
+    color: #bbb;
+}
+
+.price-container {
+    display: flex;
+    font-size: 22px;
+    font-weight: bold;
+    gap: 10px;
+}
+.price-title {
+    color: #bbb;
+}
+.price {
+    color: #450693;
+}
+
+hr {
+    color: #ddd;
+    padding: 0 10px;
+}
+
+.pay-container {
+    width: 100%;
+}
+
+.pay-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: left;
+}
+
+.pay-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
 .pay-method {
     padding: 15px;
+    background-color: white;
     border: 1px solid #ddd;
+    cursor: pointer;
 }
 .pay-method.selected {
     border: 1px solid #0046FF;
+    background-color: #FBF3D1;
+}
+
+.pay-btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #000;
+    border: none;
+    border-radius: 8px;
+    margin-right: 0;
+    cursor: pointer;
+}
+.pay-btn:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+.pay-btn:not(:disabled):hover  {
+    background-color: #111;
+}
+
+@media (max-width: 1150px) {
+    .img-container {
+        width: 25%;
+    }
+}
+@media (max-width: 650px) {
+    .inform-container {
+        flex-direction: column;
+    }
+    .img-container {
+        width: 90%;
+        aspect-ratio: 2 / 1;
+        margin-bottom: 10px;
+    }
+    .inform {
+        width: 90%;
+        margin-left: 0;
+    }
+    .pay-container {
+        width: 90%;
+        margin: 0 auto;
+    }
+    .pay-btn {
+        margin-bottom: 10px;
+    }
 }

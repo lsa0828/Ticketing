@@ -17,19 +17,25 @@
                 <div class="img-container">
                     <img src="${contextPath}${concert.imageUrl}" alt="${concert.title}">
                 </div>
-                <p class="concert-title">${concert.title}</p>
-                <p class="concert-venue">${concert.venueName}</p>
-                <div class="seat-container">
-                    <p class="seat-title">좌석</p>
-                    <p class="seat-inform">${seat.section}열 ${seat.number}</p>
-                </div>
-                <div class="price-container">
-                    <p class="price-title">총 결제 금액</p>
-                    <p class="price">${seat.price}</p>
+                <div class="inform">
+                    <p class="concert-title">${concert.title}</p>
+                    <div class="venue-container">
+                        <p class="venue-title">장소</p>
+                        <p class="concert-venue">${concert.venueName}</p>
+                    </div>
+                    <div class="seat-container">
+                        <p class="seat-title">좌석</p>
+                        <p class="seat-inform">${seat.section}열 ${seat.number}</p>
+                    </div>
+                    <div class="price-container">
+                        <p class="price-title">총 결제 금액</p>
+                        <p class="price">0원</p>
+                    </div>
                 </div>
             </div>
+            <hr />
             <div class="pay-container">
-                <p>결제 방법 선택</p>
+                <p class="pay-title">결제 방법 선택</p>
                 <div class="pay-selection">
                     <button class="pay-method" data-pay-id="1">결제1</button>
                     <button class="pay-method" data-pay-id="2">결제2</button>
@@ -40,6 +46,9 @@
     </div>
 
     <script>
+        const price = parseInt('${seat.price}', 10);
+        document.querySelector('.price').textContent = price.toLocaleString() + '원';
+
         selectedMethod = null;
 
         document.querySelectorAll('.pay-method').forEach(method => {
