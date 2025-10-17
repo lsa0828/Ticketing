@@ -15,7 +15,7 @@ public class ReservationDAO {
         return jdbcTemplate.update(sql, memberId, concertId, seatId, payId);
     }
 
-    public Long getReserveId(Long memberId, Long concertId, Long seatId) {
+    public Long getReservationId(Long memberId, Long concertId, Long seatId) {
         String sql = "SELECT id FROM reservations "
                 + "WHERE member_id = ? AND concert_id = ? AND seat_id = ? "
                 + "ORDER BY reserved_at DESC LIMIT 1";

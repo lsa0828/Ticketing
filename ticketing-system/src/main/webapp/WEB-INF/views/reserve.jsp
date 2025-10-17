@@ -93,8 +93,8 @@
                 return response.json();
             })
             .then(data => {
-                if (data.reserveId) {
-                    window.location.href = `${contextPath}/reserve/complete?reserveId=\${data.reserveId}`;
+                if (data.reservationId) {
+                    window.location.href = `${contextPath}/reserve/complete?reservationId=\${data.reservationId}`;
                 }
             })
             .catch(err => {

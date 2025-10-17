@@ -2,12 +2,13 @@ package org.example.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.example.dto.ReservedConcertDTO;
 import org.example.dto.response.ConcertVenueDTO;
 import org.example.dto.response.MemberResponseDTO;
 import org.example.dto.request.PayRequestDTO;
 import org.example.dto.SeatDTO;
 import org.example.service.ConcertService;
-import org.example.service.ReserveService;
+import org.example.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
@@ -20,12 +21,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
-public class ReserveController {
+public class ReservationController {
     @Autowired
-    private ReserveService reserveService;
+    private ReservationService reservationService;
     @Autowired
     private ConcertService concertService;
 
@@ -36,7 +38,7 @@ public class ReserveController {
         MemberResponseDTO member = (MemberResponseDTO) session.getAttribute("loginMember");
 
         try {
-            SeatDTO seat = reserveService.updateSeatReservation(seatId, concertId, member.getId());
+            SeatDTO seat = reservationService.updateSeatReservation(seatId, concertId, member.getId());
             ConcertVenueDTO concert = concertService.getConcertVenue(concertId);
             model.addAttribute("concert", concert);
             model.addAttribute("seat", seat);
@@ -56,8 +58,8 @@ public class ReserveController {
         MemberResponseDTO member = (MemberResponseDTO) session.getAttribute("loginMember");
 
         try {
-            Long reserveId = reserveService.payAndReserve(payRequest, member.getId());
-            return ResponseEntity.ok(Map.of("reserveId", reserveId));
+            Long reservationId = reservationService.payAndReserve(payRequest, member.getId());
+            return ResponseEntity.ok(Map.of("reservationId", reservationId));
         } catch (OptimisticLockingFailureException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Map.of("error", e.getMessage()));
@@ -68,7 +70,22 @@ public class ReserveController {
     }
 
     @GetMapping("/reserve/complete")
-    public String completePage(@RequestParam("reserveId") Long reserveId) {
-        return "redirect:/";
+    public String reservationDetailPage(@RequestParam("reservationId") Long reservationId, HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession(false);
+        MemberResponseDTO member = (MemberResponseDTO) session.getAttribute("loginMember");
+
+        ReservedConcertDTO reservedConcert = reservationService.getReservation(reservationId, member.getId());
+        model.addAttribute("reservedConcert", reservedConcert);
+        return "reservationDetail";
+    }
+
+    @GetMapping("/reserve/all")
+    public String reservationListPage(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession(false);
+        MemberResponseDTO member = (MemberResponseDTO) session.getAttribute("loginMember");
+
+        List<ReservedConcertDTO> reservedConcerts = reservationService.getReservationList(member.getId());
+        model.addAttribute("reservedConcerts", reservedConcerts);
+        return "reservationList";
     }
 }
