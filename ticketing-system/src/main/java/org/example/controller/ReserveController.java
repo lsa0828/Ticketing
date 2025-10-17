@@ -2,9 +2,9 @@ package org.example.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.example.dto.ConcertVenueDTO;
-import org.example.dto.MemberResponseDTO;
-import org.example.dto.PayRequestDTO;
+import org.example.dto.response.ConcertVenueDTO;
+import org.example.dto.response.MemberResponseDTO;
+import org.example.dto.request.PayRequestDTO;
 import org.example.dto.SeatDTO;
 import org.example.service.ConcertService;
 import org.example.service.ReserveService;

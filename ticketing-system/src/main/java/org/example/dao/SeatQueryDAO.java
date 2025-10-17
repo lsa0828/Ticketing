@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class SeatDAO {
+public class SeatQueryDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

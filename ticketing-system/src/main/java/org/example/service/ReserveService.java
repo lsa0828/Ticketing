@@ -2,9 +2,9 @@ package org.example.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.dao.ReservationDAO;
-import org.example.dao.SeatDAO;
+import org.example.dao.SeatQueryDAO;
 import org.example.dao.SeatReservationDAO;
-import org.example.dto.PayRequestDTO;
+import org.example.dto.request.PayRequestDTO;
 import org.example.dto.SeatDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ReserveService {
     @Autowired
-    private SeatDAO seatDAO;
+    private SeatQueryDAO seatQueryDAO;
     @Autowired
     private SeatReservationDAO seatReservationDAO;
     @Autowired
@@ -29,7 +29,7 @@ public class ReserveService {
         if (updated == 0) {
             throw new OptimisticLockingFailureException("Seat was modified by another user");
         }
-        return seatDAO.getSeat(seatId, concertId);
+        return seatQueryDAO.getSeat(seatId, concertId);
     }
 
     @Transactional

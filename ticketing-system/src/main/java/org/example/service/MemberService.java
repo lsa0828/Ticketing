@@ -2,7 +2,7 @@ package org.example.service;
 
 import org.example.dao.LoginTokenDAO;
 import org.example.dao.MemberDAO;
-import org.example.dto.MemberResponseDTO;
+import org.example.dto.response.MemberResponseDTO;
 import org.example.model.Member;
 import org.example.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;

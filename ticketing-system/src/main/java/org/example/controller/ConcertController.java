@@ -1,6 +1,6 @@
 package org.example.controller;
 
-import org.example.dto.ConcertVenueDTO;
+import org.example.dto.response.ConcertVenueDTO;
 import org.example.dto.CurrentSeatDTO;
 import org.example.service.ConcertService;
 import org.example.service.SeatService;

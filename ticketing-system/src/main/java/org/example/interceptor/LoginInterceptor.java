@@ -3,7 +3,7 @@ package org.example.interceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.example.dto.MemberResponseDTO;
+import org.example.dto.response.MemberResponseDTO;
 import org.example.service.MemberService;
 import org.example.util.CookieUtil;
 import org.springframework.beans.factory.annotation.Autowired;
