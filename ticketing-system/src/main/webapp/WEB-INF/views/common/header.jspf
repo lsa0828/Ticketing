@@ -7,6 +7,9 @@
             <c:choose>
                 <c:when test="${not empty sessionScope.loginMember}">
                     <span>${sessionScope.loginMember.name}님</span>
+                    <a href="${contextPath}/reservation/all">
+                        <button>예매내역</button>
+                    </a>
                     <a href="${contextPath}/logout">로그아웃</a>
                 </c:when>
                 <c:otherwise>

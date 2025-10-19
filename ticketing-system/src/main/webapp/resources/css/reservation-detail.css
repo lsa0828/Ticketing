@@ -1,0 +1,135 @@
+.reservation-container {
+    width: 85%;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    background-color: white;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.concert-container {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.img-container {
+    width: 120px;
+    height: 160px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #eee;
+}
+
+.img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.concert {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+    overflow: hidden;
+}
+
+.concert-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-align: left;
+    word-break: break-word;
+    white-space: normal;
+    line-height: 1.4;
+}
+
+.concert-venue {
+    font-size: 0.95rem;
+    text-align: left;
+}
+
+.reservation-container hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 0 20px;
+}
+
+.inform-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.inform-container > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 150px;
+}
+
+.seat-title, .price-title, .date-title {
+    font-weight: 500;
+    color: #444;
+}
+
+.seat, .price, .reserved-at {
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.status {
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 20px;
+    background-color: #f9f9f9;
+}
+
+.status button {
+    padding: 8px 16px;
+    border: 1px solid #d9534f;
+    border-radius: 6px;
+    background-color: white;
+    color: #d9534f;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.status button:hover {
+    background-color: #d9534f;
+    color: white;
+}
+
+@media (max-width: 840px) {
+    .concert-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .img-container {
+        width: 100%;
+        height: 220px;
+    }
+    .concert-title, .concert-venue {
+        text-align: center;
+    }
+
+    .inform-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .status {
+        justify-content: center;
+    }
+}

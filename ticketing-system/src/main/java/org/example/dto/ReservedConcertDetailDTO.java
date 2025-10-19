@@ -10,9 +10,14 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ReservedConcertDTO {
+public class ReservedConcertDetailDTO {
     private Long reservationId;
     private String title;
+    private String imageUrl;
+    private String venueName;
+    private String section;
+    private int number;
+    private int price;
     private String reservationStatus;
     private LocalDateTime reservedAt;
 

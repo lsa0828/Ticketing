@@ -94,7 +94,7 @@
             })
             .then(data => {
                 if (data.reservationId) {
-                    window.location.href = `${contextPath}/reserve/complete?reservationId=\${data.reservationId}`;
+                    window.location.href = `${contextPath}/reservation/complete?reservationId=\${data.reservationId}`;
                 }
             })
             .catch(err => {

@@ -6,6 +6,7 @@ import org.example.dao.ReservationViewDAO;
 import org.example.dao.SeatViewDAO;
 import org.example.dao.SeatReservationDAO;
 import org.example.dto.ReservedConcertDTO;
+import org.example.dto.ReservedConcertDetailDTO;
 import org.example.dto.request.PayRequestDTO;
 import org.example.dto.SeatDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class ReservationService {
         return reservationDAO.getReservationId(memberId, concertId, seatId);
     }
 
-    public ReservedConcertDTO getReservation(Long reservationId, Long memberId) {
+    public ReservedConcertDetailDTO getReservation(Long reservationId, Long memberId) {
         return reservationViewDAO.findById(reservationId, memberId);
     }
 

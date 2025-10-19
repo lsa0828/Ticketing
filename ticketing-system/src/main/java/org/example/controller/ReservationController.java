@@ -3,6 +3,7 @@ package org.example.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.example.dto.ReservedConcertDTO;
+import org.example.dto.ReservedConcertDetailDTO;
 import org.example.dto.response.ConcertVenueDTO;
 import org.example.dto.response.MemberResponseDTO;
 import org.example.dto.request.PayRequestDTO;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -69,17 +71,17 @@ public class ReservationController {
         }
     }
 
-    @GetMapping("/reserve/complete")
+    @GetMapping("/reservation/complete")
     public String reservationDetailPage(@RequestParam("reservationId") Long reservationId, HttpServletRequest request, Model model) {
         HttpSession session = request.getSession(false);
         MemberResponseDTO member = (MemberResponseDTO) session.getAttribute("loginMember");
 
-        ReservedConcertDTO reservedConcert = reservationService.getReservation(reservationId, member.getId());
+        ReservedConcertDetailDTO reservedConcert = reservationService.getReservation(reservationId, member.getId());
         model.addAttribute("reservedConcert", reservedConcert);
         return "reservationDetail";
     }
 
-    @GetMapping("/reserve/all")
+    @GetMapping("/reservation/all")
     public String reservationListPage(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession(false);
         MemberResponseDTO member = (MemberResponseDTO) session.getAttribute("loginMember");
