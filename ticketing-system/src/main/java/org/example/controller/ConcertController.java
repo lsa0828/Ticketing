@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,8 +23,13 @@ public class ConcertController {
     private SeatService seatService;
 
     @GetMapping("/concert/{concertId}")
-    public String showSeatsOfConcert(@PathVariable("concertId") Long concertId, Model model) {
+    public String showSeatsOfConcert(@PathVariable("concertId") Long concertId, Model model,
+                                     RedirectAttributes redirectAttributes) {
         ConcertVenueDTO concert = concertService.getConcertVenue(concertId);
+        if (!concert.getBookable()) {
+            redirectAttributes.addFlashAttribute("error", "이미 예매가 마감된 공연입니다.");
+            return "redirect:/";
+        }
         model.addAttribute("concert", concert);
 
         List<CurrentSeatDTO> seats = seatService.getSeatStatusOfConcert(concertId);

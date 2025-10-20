@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 @Repository
 public class ConcertDAO {
@@ -27,6 +28,7 @@ public class ConcertDAO {
                     rs.getLong("id"),
                     rs.getLong("venue_id"),
                     rs.getString("title"),
+                    rs.getObject("date", LocalDate.class),
                     rs.getString("image_url")
             );
         }

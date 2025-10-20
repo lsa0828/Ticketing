@@ -20,10 +20,24 @@
         <div id="page-dots" class="page-dots"></div>
     </div>
 
+    <c:if test="${not empty error}">
+        <script>
+            alert("${error}");
+        </script>
+    </c:if>
+
     <script>
         const concertsData = [
             <c:forEach var="c" items="${concerts}">
-                {id:${c.concertId}, title:"${c.title}", imageUrl:"${contextPath}${c.imageUrl}", soldCount:${c.soldCount}, totalCount:${c.totalCount}},
+                {
+                    id:${c.concertId},
+                    title:"${c.title}",
+                    days: "${c.daysUntilConcert}",
+                    disable: ${c.daysUntilConcert < 0},
+                    imageUrl:"${contextPath}${c.imageUrl}",
+                    soldCount: ${c.soldCount},
+                    totalCount: ${c.totalCount}
+                },
             </c:forEach>
         ];
         const contextPath = "${contextPath}";

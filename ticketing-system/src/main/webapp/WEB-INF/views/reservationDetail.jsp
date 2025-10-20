@@ -25,21 +25,25 @@
             </div>
             <hr />
             <div class="inform-container">
-                <div class="seat-container">
+                <div>
                     <p class="seat-title">좌석</p>
                     <p class="seat">${c.section}열 ${c.number}</p>
                 </div>
-                <div class="price-container">
+                <div>
                     <p class="price-title">가격</p>
                     <p class="price">0원</p>
                 </div>
-                <div class="date-container">
-                    <p class="date-title">예매일</p>
-                    <p class="reserved-at">${c.reservedAtFormatted}</p>
+                <div>
+                    <p class="concert-date-title">공연일</p>
+                    <p class="concert-date">${c.dateFormatted}</p>
                 </div>
             </div>
             <c:if test="${c.reservationStatus == 'PAID'}">
                 <div class="status">
+                    <div class="reservation-date-container">
+                        <p class="reservation-date-title">예매일</p>
+                        <p class="reserved-at">${c.reservedAtFormatted}</p>
+                    </div>
                     <button>예매 취소하기</button>
                 </div>
             </c:if>

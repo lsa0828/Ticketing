@@ -25,12 +25,17 @@ function render(page) {
     let html = `<div class="concerts">`;
     for (let i = start; i < end; i++) {
         const c = concerts[i];
+        let days = '지난 공연';
+        if (!c.disable) {
+            days = 'D-' + c.days;
+        }
         html += `
             <div class="concert">
                 <div class="image-container">
                     <img src="${c.imageUrl}" alt="${c.title}">
                     <div class="overlay">
-                        <a href="${contextPath}/concert/${c.id}" class="book-btn">예매하기</a>
+                        <div class="days">${days}</div>
+                        <a href="${contextPath}/concert/${c.id}" class="book-btn ${c.disable ? 'disabled' : ''}">예매하기</a>
                         <div class="seat-status">
                             ${c.soldCount}/${c.totalCount}
                         </div>

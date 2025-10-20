@@ -62,6 +62,12 @@
     opacity: 1;
 }
 
+.days {
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
 .book-btn {
     text-decoration: none;
     background: transparent;
@@ -77,6 +83,11 @@
 }
 .book-btn:hover {
     background: rgba(255,255,255,0.2);
+}
+.book-btn.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: default;
 }
 
 .seat-status {

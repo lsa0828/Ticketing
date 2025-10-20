@@ -39,14 +39,18 @@ public class ReservationController {
         HttpSession session = request.getSession(false);
         MemberResponseDTO member = (MemberResponseDTO) session.getAttribute("loginMember");
 
+        ConcertVenueDTO concert = concertService.getConcertVenue(concertId);
+
         try {
             SeatDTO seat = reservationService.updateSeatReservation(seatId, concertId, member.getId());
-            ConcertVenueDTO concert = concertService.getConcertVenue(concertId);
             model.addAttribute("concert", concert);
             model.addAttribute("seat", seat);
             return "reserve";
+        } catch (IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/";
         } catch (OptimisticLockingFailureException e) {
-            redirectAttributes.addFlashAttribute("error", "이미 선택된 좌석입니다.");
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/concert/" + concertId;
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "예매 중 오류가 발생했습니다.");
@@ -62,6 +66,9 @@ public class ReservationController {
         try {
             Long reservationId = reservationService.payAndReserve(payRequest, member.getId());
             return ResponseEntity.ok(Map.of("reservationId", reservationId));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", e.getMessage()));
         } catch (OptimisticLockingFailureException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Map.of("error", e.getMessage()));

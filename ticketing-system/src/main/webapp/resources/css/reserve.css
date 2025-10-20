@@ -38,6 +38,9 @@
 .venue-container,
 .venue-title,
 .concert-venue,
+.date-container,
+.date-title,
+.date,
 .seat-container,
 .seat-title,
 .seat-inform,
@@ -54,28 +57,19 @@
     white-space: normal;
 }
 
-.venue-container {
+.venue-container, .date-container, .seat-container {
     display: flex;
     font-size: 18px;
-    font-weight: bold;
     gap: 10px;
 }
-.venue-title {
+
+.venue-title, .date-title, .seat-title {
     color: #bbb;
 }
+
 .concert-venue {
     word-wrap: break-word;
     white-space: normal;
-}
-
-.seat-container {
-    display: flex;
-    font-size: 18px;
-    font-weight: bold;
-    gap: 10px;
-}
-.seat-title {
-    color: #bbb;
 }
 
 .price-container {
@@ -141,6 +135,18 @@ hr {
 }
 .pay-btn:not(:disabled):hover  {
     background-color: #111;
+}
+
+.not-pay-btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #aaa;
+    border: none;
+    border-radius: 8px;
+    margin-right: 0;
+    cursor: not-allowed;
 }
 
 @media (max-width: 1150px) {

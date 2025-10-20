@@ -9,6 +9,8 @@ import org.example.model.Concert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -30,6 +32,7 @@ public class ConcertService {
                 concert.getId(),
                 venueDAO.findById(concert.getVenueId()).getName(),
                 concert.getTitle(),
+                concert.getDate(),
                 concert.getImageUrl()
         );
     }

@@ -19,6 +19,7 @@
                     <div class="concert-container">
                         <p class="concert-title">${c.title}</p>
                         <div class="date-container">
+                            <div class="days">D-${c.daysUntilConcert}</div>
                             <p class="date-title">예매일</p>
                             <p class="reserved-at">${c.reservedAtFormatted}</p>
                         </div>

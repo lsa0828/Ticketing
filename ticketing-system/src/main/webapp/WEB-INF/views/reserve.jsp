@@ -23,6 +23,10 @@
                         <p class="venue-title">장소</p>
                         <p class="concert-venue">${concert.venueName}</p>
                     </div>
+                    <div class="date-container">
+                        <p class="date-title">일자</p>
+                        <p class="date">${concert.dateFormatted}</p>
+                    </div>
                     <div class="seat-container">
                         <p class="seat-title">좌석</p>
                         <p class="seat-inform">${seat.section}열 ${seat.number}</p>
@@ -40,7 +44,14 @@
                     <button class="pay-method" data-pay-id="1">결제1</button>
                     <button class="pay-method" data-pay-id="2">결제2</button>
                 </div>
-                <button class="pay-btn" disabled>결제하기</button>
+                <c:choose>
+                    <c:when test="${concert.bookable}">
+                        <button class="pay-btn" disabled>결제하기</button>
+                    </c:when>
+                    <c:otherwise>
+                        <button class="not-pay-btn" disabled>결제불가</button>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </div>
@@ -87,7 +98,12 @@
             .then(response => {
                 if (!response.ok) {
                     return response.json().then(err => {
-                        throw new Error(err.error || '서버 오류');
+                        if (response.status === 400 || response.status === 409) {
+                            alert(err.error || '요청 처리 중 오류가 발생했습니다.');
+                        } else {
+                            alert('결제 중 오류가 발생했습니다.');
+                        }
+                        throw new Error(err.error || '요청 실패');
                     });
                 }
                 return response.json();
@@ -99,7 +115,6 @@
             })
             .catch(err => {
                 console.error(err);
-                alert('결제 중 오류가 발생했습니다.');
             });
         });
     </script>

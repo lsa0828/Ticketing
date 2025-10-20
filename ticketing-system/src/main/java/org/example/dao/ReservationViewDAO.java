@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -16,7 +17,7 @@ public class ReservationViewDAO {
     public ReservedConcertDetailDTO findById(Long reservationId, Long memberId) {
         String sql = """
                 SELECT r.id AS reservation_id,
-                    c.title, c.image_url,
+                    c.title, c.date, c.image_url,
                     v.name AS venue_name,
                     s.section, s.number, sr.price,
                     r.status AS reservation_status, r.reserved_at
@@ -31,6 +32,7 @@ public class ReservationViewDAO {
                 new ReservedConcertDetailDTO(
                         rs.getLong("reservation_id"),
                         rs.getString("title"),
+                        rs.getObject("date", LocalDate.class),
                         rs.getString("image_url"),
                         rs.getString("venue_name"),
                         rs.getString("section"),
@@ -46,7 +48,7 @@ public class ReservationViewDAO {
     public List<ReservedConcertDTO> findAll(Long memberId) {
         String sql = """
                 SELECT r.id AS reservation_id,
-                    c.title,
+                    c.title, c.date,
                     r.status AS reservation_status, r.reserved_at
                 FROM reservations r
                 JOIN concerts c ON r.concert_id = c.id
@@ -57,6 +59,7 @@ public class ReservationViewDAO {
                 new ReservedConcertDTO(
                         rs.getLong("reservation_id"),
                         rs.getString("title"),
+                        rs.getObject("date", LocalDate.class),
                         rs.getString("reservation_status"),
                         rs.getTimestamp("reserved_at").toLocalDateTime()
                 ),

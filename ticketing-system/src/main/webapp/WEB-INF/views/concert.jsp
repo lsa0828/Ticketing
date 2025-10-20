@@ -31,11 +31,19 @@
                 <img src="${contextPath}${concert.imageUrl}" alt="${concert.title}">
                 <p class="concert-title">${concert.title}</p>
                 <p class="concert-venue">[${concert.venueName}]</p>
+                <p class="concert-date">${concert.dateFormatted}</p>
                 <div class="price-container">
                     <p class="price-title">결제 금액</p>
                     <p class="price">0원</p>
                 </div>
-                <button class="book-btn" disabled>예매하기</button>
+                <c:choose>
+                    <c:when test="${concert.bookable}">
+                        <button class="book-btn" disabled>예매하기</button>
+                    </c:when>
+                    <c:otherwise>
+                        <button class="not-book-btn" disabled>예매불가</button>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </div>
