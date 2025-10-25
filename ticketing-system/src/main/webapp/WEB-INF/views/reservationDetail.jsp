@@ -30,29 +30,55 @@
                     <p class="seat">${c.section}열 ${c.number}</p>
                 </div>
                 <div>
-                    <p class="price-title">가격</p>
-                    <p class="price">0원</p>
-                </div>
-                <div>
                     <p class="concert-date-title">공연일</p>
                     <p class="concert-date">${c.dateFormatted}</p>
                 </div>
             </div>
-            <c:if test="${c.reservationStatus == 'PAID'}">
-                <div class="status">
-                    <div class="reservation-date-container">
-                        <p class="reservation-date-title">예매일</p>
-                        <p class="reserved-at">${c.reservedAtFormatted}</p>
+            <div class="payment-container">
+                <c:if test="${not empty c.couponName}">
+                    <div>
+                        <p class="payment-title">쿠폰 사용</p>
+                        <p class="coupon">'${c.couponName}'</p>
                     </div>
-                    <button>예매 취소하기</button>
+                </c:if>
+                <c:if test="${not empty c.point and c.point > 0}">
+                    <div>
+                        <p class="payment-title">포인트 사용</p>
+                        <p class="point">${c.point} point</p>
+                    </div>
+                </c:if>
+                <div>
+                    <p class="payment-title">결제 금액</p>
+                    <p class="price">0원</p>
                 </div>
-            </c:if>
+            </div>
+            <div class="status">
+                <div class="reservation-date-container">
+                    <p class="reservation-date-title">예매일</p>
+                    <p class="reserved-at">${c.reservedAtFormatted}</p>
+                </div>
+                <button type="button" onclick="confirmCancel(${c.reservationId})">
+                    예매 취소하기
+                </button>
+            </div>
         </div>
     </div>
 
     <script>
-        const price = parseInt('${c.price}', 10);
+        const price = parseInt('${c.paidPrice}', 10);
         document.querySelector('.price').textContent = price.toLocaleString() + '원';
+
+        function confirmCancel(reservationId) {
+            const confirmed = confirm("예매를 취소하시겠습니까?");
+            if (confirmed) {
+                window.location.href = `${contextPath}/refund?reservationId=\${reservationId}`;
+            }
+        }
     </script>
+    <c:if test="${not empty error}">
+        <script>
+            alert("${error}");
+        </script>
+    </c:if>
 </body>
 </html>

@@ -19,7 +19,9 @@ public class ReservedConcertDetailDTO {
     private String venueName;
     private String section;
     private int number;
-    private int price;
+    private String couponName;
+    private int point;
+    private int paidPrice;
     private String reservationStatus;
     private LocalDateTime reservedAt;
 

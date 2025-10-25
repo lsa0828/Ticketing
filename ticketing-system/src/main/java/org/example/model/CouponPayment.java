@@ -7,12 +7,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class Member {
-    private Long id;
-    private String name;
-    private String password;
-    private int point;
-    private String role;
+@NoArgsConstructor
+public class CouponPayment {
+    private Long reservationId;
+    private Long memberCouponId;
+    private int originalPrice;
+    private int discountedPrice;
 }

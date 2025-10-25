@@ -32,7 +32,10 @@
                                 </a>
                             </c:when>
                             <c:otherwise>
-                                <p>예매 취소</p>
+                                <div class="refund-container">
+                                    <p>예매 취소</p>
+                                    <p>${c.refundedAtFormatted}</p>
+                                </div>
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -41,7 +44,10 @@
         </div>
     </div>
 
-    <script>
-    </script>
+    <c:if test="${not empty message}">
+        <script>
+            alert("${message}");
+        </script>
+    </c:if>
 </body>
 </html>

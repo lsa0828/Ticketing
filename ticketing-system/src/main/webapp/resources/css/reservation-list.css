@@ -1,7 +1,7 @@
 .reservation-container {
     width: 90%;
-    margin: 10px;
-    margin: 5px 0;
+    height: 100%;
+    margin: 10px 0;
 }
 
 .reservation-title {
@@ -95,9 +95,8 @@
     background-color: #f0f0f0;
 }
 
-.status p {
-    color: #999;
-    font-weight: 500;
+.refund-container p {
+    color: #777;
 }
 
 @media (max-width: 950px) {
@@ -106,6 +105,9 @@
     }
     .status {
         width: 20%;
+    }
+    .refund-container p {
+        font-size: 14px;
     }
 }
 @media (max-width: 768px) {
@@ -136,5 +138,14 @@
 
     .concert-title {
         font-size: 16px;
+    }
+
+    .refund-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .refund-container p {
+        font-size: 12px;
     }
 }

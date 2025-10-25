@@ -2,6 +2,7 @@ package org.example.dao;
 
 import org.example.model.Member;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -23,15 +24,7 @@ public class LoginTokenDAO {
                 "JOIN login_tokens t ON m.id = t.member_id " +
                 "WHERE t.token = ? AND t.expiry > NOW()";
         try {
-            return jdbcTemplate.queryForObject(sql, (rs, rowNum) ->
-                    new Member(
-                            rs.getLong("id"),
-                            rs.getString("name"),
-                            rs.getString("password"),
-                            rs.getString("role")
-                    ),
-                    token
-            );
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Member.class), token);
         } catch (Exception e) {
             return null;
         }

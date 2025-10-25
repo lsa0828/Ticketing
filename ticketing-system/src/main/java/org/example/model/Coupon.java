@@ -5,14 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class Member {
+@NoArgsConstructor
+public class Coupon {
     private Long id;
     private String name;
-    private String password;
-    private int point;
-    private String role;
+    private int discountRate;
+    private int discountAmount;
+    private LocalDate expiresAt;
 }

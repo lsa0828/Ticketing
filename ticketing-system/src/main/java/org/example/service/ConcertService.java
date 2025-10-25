@@ -27,7 +27,8 @@ public class ConcertService {
     }
 
     public ConcertVenueDTO getConcertVenue(Long concertId) {
-        Concert concert = concertDAO.findById(concertId);
+        Concert concert = concertDAO.findById(concertId)
+                .orElseThrow(() -> new IllegalArgumentException("공연 정보를 찾을 수 없습니다."));
         return new ConcertVenueDTO(
                 concert.getId(),
                 venueDAO.findById(concert.getVenueId()).getName(),

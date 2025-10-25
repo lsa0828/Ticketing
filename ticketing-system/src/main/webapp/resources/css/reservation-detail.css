@@ -75,18 +75,44 @@
     min-width: 170px;
 }
 
-.seat-title, .price-title, .concert-date-title, .reservation-date-title {
+.seat-title, .concert-date-title, .reservation-date-title {
     display: flex;
     align-items: center;
     font-weight: 500;
     color: #444;
 }
 
-.seat, .price, .concert-date, .reserved-at {
+.seat, .concert-date, .reserved-at {
     display: flex;
     align-items: center;
     color: #555;
     font-size: 0.95rem;
+}
+
+.payment-container {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #ddd;
+    padding: 18px 20px;
+    gap: 10px;
+}
+.payment-container > div {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+}
+.payment-container > div > p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.payment-title {
+    font-weight: 500;
+    color: #444;
+}
+.coupon, .point, .price {
+    color: #555;
 }
 
 .status {
@@ -110,17 +136,16 @@
     display: flex;
     align-items: center;
     padding: 8px 16px;
-    border: 1px solid #d9534f;
+    border: 1px solid #bbb;
     border-radius: 6px;
     background-color: white;
-    color: #d9534f;
+    color: #bbb;
     cursor: pointer;
     font-weight: 500;
     transition: 0.2s;
 }
-
 .status button:hover {
-    background-color: #d9534f;
+    background-color: #000;
     color: white;
 }
 

@@ -18,10 +18,16 @@ public class ReservedConcertDTO {
     private LocalDate date;
     private String reservationStatus;
     private LocalDateTime reservedAt;
+    private LocalDateTime refundedAt;
 
     public String getReservedAtFormatted() {
         if (reservedAt == null) return "";
         return reservedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    public String getRefundedAtFormatted() {
+        if (refundedAt == null) return "";
+        return refundedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public Long getDaysUntilConcert() {

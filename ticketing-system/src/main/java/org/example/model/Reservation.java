@@ -2,6 +2,7 @@ package org.example.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Reservation {
     private Long id;
     private Long memberId;
@@ -16,5 +18,5 @@ public class Reservation {
     private Long seatId;
     private String status;
     private LocalDateTime reservedAt;
-    private Long payId;
+    private LocalDateTime refundedAt;
 }

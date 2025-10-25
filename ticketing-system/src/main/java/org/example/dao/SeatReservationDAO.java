@@ -16,17 +16,21 @@ public class SeatReservationDAO {
 
     public int updateSeatToBooking(Long seatId, Long concertId, Long memberId) {
         // int currentVersion = getVersion(seatId, concertId);
-        String sql = "UPDATE seat_reservations "
-                + "SET status = 'BOOKING', member_id = ?, booking_time = NOW(), expires_at = DATE_ADD(NOW(), INTERVAL 10 MINUTE), version = version + 1 "
-                + "WHERE concert_id = ? AND seat_id = ? "
-                + "AND (status = 'AVAILABLE' OR (status = 'BOOKING' AND member_id = ?) OR (status = 'BOOKING' AND expires_at < NOW()))";
+        String sql = """
+                UPDATE seat_reservations
+                SET status = 'BOOKING', member_id = ?, booking_time = NOW(), expires_at = DATE_ADD(NOW(), INTERVAL 15 MINUTE), version = version + 1
+                WHERE concert_id = ? AND seat_id = ?
+                AND (status = 'AVAILABLE' OR (status = 'BOOKING' AND member_id = ?) OR (status = 'BOOKING' AND expires_at < NOW()))
+                """;
         return jdbcTemplate.update(sql, memberId, concertId, seatId, memberId);
     }
 
     public void releaseSeatForOtherMember(Long seatId, Long concertId, Long memberId) {
-        String sql = "UPDATE seat_reservations "
-                + "SET status = 'AVAILABLE', member_id = NULL, booking_time = NULL, expires_at = NULL, version = version + 1 "
-                + "WHERE seat_id != ? AND concert_id = ? AND member_id = ? AND status = 'BOOKING'";
+        String sql = """
+                UPDATE seat_reservations
+                SET status = 'AVAILABLE', member_id = NULL, booking_time = NULL, expires_at = NULL, version = version + 1
+                WHERE seat_id != ? AND concert_id = ? AND member_id = ? AND status = 'BOOKING'
+                """;
         int updated = jdbcTemplate.update(sql, seatId, concertId, memberId);
         if (updated > 0) {
             System.out.println("[SeatReleaseScheduler] Released " + updated + " expired seats.");
@@ -34,34 +38,40 @@ public class SeatReservationDAO {
     }
 
     public int releaseExpiredSeats() {
-        String sql = "UPDATE seat_reservations "
-                + "SET status = 'AVAILABLE', member_id = NULL, booking_time = NULL, expires_at = NULL, version = version + 1 "
-                + "WHERE status = 'BOOKING' AND expires_at < NOW()";
+        String sql = """
+                UPDATE seat_reservations
+                SET status = 'AVAILABLE', member_id = NULL, booking_time = NULL, expires_at = NULL, version = version + 1
+                WHERE status = 'BOOKING' AND expires_at < NOW()
+                """;
         return jdbcTemplate.update(sql);
     }
 
     public int updateSeatToSold(Long concertId, Long seatId, Long memberId) {
-        String sql = "UPDATE seat_reservations "
-                + "SET status = 'SOLD' "
-                + "WHERE concert_id = ? AND seat_id = ? AND member_id = ? AND status = 'BOOKING' AND expires_at > NOW()";
+        String sql = """
+                UPDATE seat_reservations
+                SET status = 'SOLD', version = version + 1
+                WHERE concert_id = ? AND seat_id = ? AND member_id = ? AND status = 'BOOKING' AND expires_at > NOW()
+                """;
         return jdbcTemplate.update(sql, concertId, seatId, memberId);
     }
 
-    /*public void releaseSeatForOtherMember(Long seatId, Long concertId, Long memberId) {
-        List<Map<String, Object>> rows = getReleasingVersion(seatId, concertId, memberId);
-        for (Map<String, Object> row : rows) {
-            Long otherSeatId = ((Number) row.get("seat_id")).longValue();
-            int currentVersion = ((Number) row.get("version")).intValue();
+    public int getPrice(Long concertId, Long seatId, Long memberId) {
+        String sql = """
+                SELECT price
+                FROM seat_reservations
+                WHERE concert_id = ? AND seat_id = ? AND status = 'SOLD' AND member_id = ? 
+                """;
+        return jdbcTemplate.queryForObject(sql, Integer.class, concertId, seatId, memberId);
+    }
 
-            String sql = "UPDATE seat_reservations "
-                    + "SET status = 'AVAILABLE', member_id = NULL, booking_time = NULL, expires_at = NULL, version = version + 1 "
-                    + "WHERE seat_id = ? AND concert_id = ? AND member_id = ? AND version = ?";
-            int updated = jdbcTemplate.update(sql, otherSeatId, concertId, memberId, currentVersion);
-            if (updated == 0) {
-                log.warn("[Seat Release] Failed: seatId={}, concertId={}, memberId={}", otherSeatId, concertId, memberId);
-            }
-        }
-    }*/
+    public void updateSeatToAvailable(Long concertId, Long seatId) {
+        String sql = """
+                UPDATE seat_reservations
+                SET status = 'AVAILABLE', version = version + 1, member_id = NULL, booking_time = NULL, expires_at = NULL
+                WHERE concert_id = ? AND seat_id = ?
+                """;
+        jdbcTemplate.update(sql, concertId, seatId);
+    }
 
     public int getVersion(Long seatId, Long concertId) {
         String sql = "SELECT version FROM seat_reservations WHERE seat_id = ? AND concert_id = ?";

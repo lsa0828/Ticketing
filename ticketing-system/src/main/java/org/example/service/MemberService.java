@@ -51,6 +51,10 @@ public class MemberService {
         }
     }
 
+    public int getPoint(Long memberId) {
+        return memberDAO.getPointById(memberId);
+    }
+
     public void deleteToken(String token) {
         loginTokenDAO.deleteByToken(token);
     }

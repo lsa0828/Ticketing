@@ -2,6 +2,7 @@ package org.example.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.time.temporal.ChronoUnit;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Concert {
     private Long id;
     private Long venueId;

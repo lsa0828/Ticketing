@@ -32,91 +32,63 @@
                         <p class="seat-inform">${seat.section}열 ${seat.number}</p>
                     </div>
                     <div class="price-container">
-                        <p class="price-title">총 결제 금액</p>
+                        <p class="price-title">결제 금액</p>
                         <p class="price">0원</p>
+                        <p class="discounted-price" style="display: none;">0원</p>
                     </div>
                 </div>
             </div>
             <hr />
-            <div class="pay-container">
-                <p class="pay-title">결제 방법 선택</p>
-                <div class="pay-selection">
-                    <button class="pay-method" data-pay-id="1">결제1</button>
-                    <button class="pay-method" data-pay-id="2">결제2</button>
+            <div class="payment-container">
+                <p class="payment-title">결제 방법 선택</p>
+                <div class="payment-selection">
+                    <button class="payment-method" id="useCouponBtn">쿠폰 적용</button>
+                    <button class="payment-method" id="usePointBtn">포인트 사용</button>
+                    <button class="payment-method" id="useIMPBtn">아임포트 결제</button>
                 </div>
-                <c:choose>
-                    <c:when test="${concert.bookable}">
-                        <button class="pay-btn" disabled>결제하기</button>
-                    </c:when>
-                    <c:otherwise>
-                        <button class="not-pay-btn" disabled>결제불가</button>
-                    </c:otherwise>
-                </c:choose>
+                <div class="payment">
+                    <div id="couponContainer" style="display: none;">
+                        <div id="couponNotice" class="coupon-notice">선택된 쿠폰: 없음</div>
+                        <div id="couponList" class="coupon-list">
+                            <c:forEach var="cp" items="${coupons}">
+                                <div class="coupon-item" data-id="${cp.memberCouponId}" data-name="${cp.name}" data-discounted-price="${cp.discountedPrice}">
+                                    <div class="coupon-name">${cp.name}</div>
+                                    <div class="coupon-expires-at">~ ${cp.expiresAt}</div>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </div>
+                    <div id="pointContainer" style="display: none;">
+                        <div>
+                            <label for="usePointInput">사용할 포인트:</label>
+                            <input type="number" id="usePointInput" step="100" min="0" />
+                            <button type="button" id="applyPointBtn">적용</button>
+                        </div>
+                        <span id="pointNotice"></span>
+                    </div>
+                </div>
+                <div id="realPaymentAmount">0원 결제</div>
+                <div class="payment-btn-container">
+                    <c:choose>
+                        <c:when test="${concert.bookable}">
+                            <button class="payment-btn" disabled>결제하기</button>
+                        </c:when>
+                        <c:otherwise>
+                            <button class="not-payment-btn" disabled>결제불가</button>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        const price = parseInt('${seat.price}', 10);
-        document.querySelector('.price').textContent = price.toLocaleString() + '원';
-
-        selectedMethod = null;
-
-        document.querySelectorAll('.pay-method').forEach(method => {
-            method.addEventListener('click', () => {
-                if (selectedMethod) {
-                    selectedMethod.classList.remove('selected');
-                }
-                if (selectedMethod !== method) {
-                    selectedMethod = method;
-                    method.classList.add('selected');
-                    document.querySelector('.pay-btn').disabled = false;
-                } else {
-                    selectedMethod = null;
-                    document.querySelector('.pay-btn').disabled = true;
-                }
-            });
-        });
-
-        document.querySelector('.pay-btn').addEventListener('click', () => {
-            if (!selectedMethod) {
-                alert('결제 방법을 선택해주세요.');
-                return;
-            }
-            const payId = selectedMethod.dataset.payId;
-            fetch(`${contextPath}/reserve`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    seatId: '${seat.id}',
-                    concertId: '${concert.id}',
-                    payId: payId
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(err => {
-                        if (response.status === 400 || response.status === 409) {
-                            alert(err.error || '요청 처리 중 오류가 발생했습니다.');
-                        } else {
-                            alert('결제 중 오류가 발생했습니다.');
-                        }
-                        throw new Error(err.error || '요청 실패');
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.reservationId) {
-                    window.location.href = `${contextPath}/reservation/complete?reservationId=\${data.reservationId}`;
-                }
-            })
-            .catch(err => {
-                console.error(err);
-            });
-        });
+        const price = '${seat.price}';
+        const point = '${point}';
+        const concertId = '${concert.id}';
+        const seatId = '${seat.id}';
+        const contextPath = '${contextPath}';
     </script>
 </body>
+<script src="<c:url value='/resources/js/reserve.js' />"></script>
 </html>
