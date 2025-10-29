@@ -1,7 +1,8 @@
 package org.example.controller;
 
-import org.example.model.Concert;
+import org.example.dto.ConcertSeatCountDTO;
 import org.example.service.ConcertService;
+import org.example.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +15,13 @@ public class MainController {
 
     @Autowired
     private ConcertService concertService;
+    @Autowired
+    private SeatService seatService;
 
     @GetMapping("/")
-    public String concert(Model model) {
-        List<Concert> concerts = concertService.getAllConcerts();
+    public String mainPage(Model model) {
+        List<ConcertSeatCountDTO> concerts = concertService.getAllConcertSeatCount();
         model.addAttribute("concerts", concerts);
-        return "concert";
+        return "main";
     }
 }

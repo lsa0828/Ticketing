@@ -1,0 +1,302 @@
+.reserve-container {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.inform-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.img-container {
+    width: 15%;
+    aspect-ratio: 3 / 4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.inform {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+    margin-left: 15px;
+}
+
+.concert-title,
+.venue-container,
+.venue-title,
+.concert-venue,
+.date-container,
+.date-title,
+.date,
+.seat-container,
+.seat-title,
+.seat-inform,
+.price-container,
+.price-title,
+.price {
+    margin: 0;
+}
+
+.concert-title {
+    font-size: 22px;
+    font-weight: bold;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.venue-container, .date-container, .seat-container {
+    display: flex;
+    font-size: 18px;
+    gap: 10px;
+}
+
+.venue-title, .date-title, .seat-title {
+    color: #999;
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+    gap: 10px;
+}
+.price-title {
+    color: #999;
+}
+.price {
+    color: #450693;
+}
+.discounted-price {
+    color: #ff3b3b;
+}
+.price.discounted {
+    text-decoration: line-through;
+    color: #aaa;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: #eee;
+    margin: 20px 0;
+}
+
+.payment-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.payment-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.payment-selection {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.payment-method {
+    padding: 12px 18px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.2s ease;
+}
+.payment-method:hover {
+    background-color: #f7f7f7;
+}
+.payment-method.selected {
+    border: 1px solid #0046FF;
+    background-color: #C2E2FA;
+}
+
+.payment {
+    width: 100%;
+}
+
+#couponContainer {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #fafafa;
+    margin-top: 5px;
+}
+.coupon-notice {
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+.coupon-list {
+    max-height: 180px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-right: 4px;
+}
+.coupon-list::-webkit-scrollbar {
+    width: 6px;
+}
+.coupon-list::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+.coupon-item {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+.coupon-item:hover {
+    background-color: #f0f7ff;
+}
+.coupon-item.selected {
+    border-color: #0046FF;
+    background-color: #eaf2ff;
+}
+.coupon-name {
+    font-weight: bold;
+}
+.coupon-expires-at {
+    font-size: 13px;
+    color: #888;
+}
+
+#pointContainer {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px 15px;
+    background-color: #fafafa;
+    margin-top: 5px;
+}
+#pointContainer label {
+    font-weight: 500;
+}
+#usePointInput {
+    width: 120px;
+    margin-left: 8px;
+    padding: 5px 8px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+#usePointInput:focus {
+    outline: none;
+    border-color: #0046FF;
+}
+#applyPointBtn {
+    padding: 5px;
+    background-color: #73C8D2;
+    border: 1px solid #000;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+}
+#pointNotice {
+    margin-top: 5px;
+    color:red;
+    font-size: 12px;
+}
+
+#realPaymentAmount {
+    font-size: 20px;
+    font-weight: bold;
+    color: #0046FF;
+    text-align: right;
+    margin-top: 10px;
+}
+
+.payment-btn-container {
+    display: flex;
+    justify-content: flex-end;
+}
+.payment-btn, .not-payment-btn {
+    padding: 12px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+.payment-btn {
+    background-color: #000;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+.payment-btn:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+.payment-btn:not(:disabled):hover  {
+    background-color: #111;
+}
+.not-payment-btn {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+@media (max-width: 1150px) {
+    .img-container {
+        width: 25%;
+    }
+}
+@media (max-width: 650px) {
+    .inform-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .img-container {
+        width: 90%;
+        display: flex;
+        justify-content: center;
+        aspect-ratio: 2 / 1;
+        margin-bottom: 10px;
+    }
+    .inform {
+        margin-left: 0;
+    }
+    .payment-container {
+        width: 100%;
+    }
+    .payment-method {
+        flex: 1;
+        font-size: 15px;
+        padding: 10px;
+    }
+    #couponContainer, #pointContainer {
+        font-size: 14px;
+    }
+    #realPaymentAmount {
+        text-align: center;
+    }
+    .payment-btn, .not-payment-btn {
+        margin-bottom: 10px;
+    }
+}

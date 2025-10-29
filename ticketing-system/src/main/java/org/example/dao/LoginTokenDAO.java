@@ -1,0 +1,42 @@
+package org.example.dao;
+
+import org.example.model.Member;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
+@Repository
+public class LoginTokenDAO {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    public void save(String token, Long memberId, LocalDateTime expiry) {
+        String sql = "INSERT INTO login_tokens (token, member_id, expiry) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, token, memberId, Timestamp.valueOf(expiry));
+    }
+
+    public Member findMemberByToken(String token) {
+        String sql = "SELECT * FROM members m " +
+                "JOIN login_tokens t ON m.id = t.member_id " +
+                "WHERE t.token = ? AND t.expiry > NOW()";
+        try {
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Member.class), token);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void deleteByToken(String token) {
+        String sql = "DELETE FROM login_tokens WHERE token = ?";
+        jdbcTemplate.update(sql, token);
+    }
+
+    public int deleteExpiredTokens() {
+        String sql = "DELETE FROM login_tokens WHERE expiry < NOW()";
+        return jdbcTemplate.update(sql);
+    }
+}
