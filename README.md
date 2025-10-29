@@ -4,7 +4,9 @@
 
 ### 프로젝트 개요
 기간: 2025.10 ~ 진행 중
+
 기술: Java, Spring, JSP, JavaScript, CSS, MySQL
+
 환경: Tomcat 10
 
 ### 주요 기능
