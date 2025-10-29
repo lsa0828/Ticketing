@@ -1,8 +1,7 @@
-package org.example.model;
+package org.example.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -11,15 +10,15 @@ import java.time.temporal.ChronoUnit;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
-public class Concert {
-    private Long id;
-    private Long venueId;
+public class ConcertSeatCountDTO {
+    private Long concertId;
     private String title;
     private LocalDate date;
     private String imageUrl;
+    private int soldCount;
+    private int totalCount;
 
-    public boolean isBookable() {
-        return ChronoUnit.DAYS.between(LocalDate.now(), date) >= 0;
+    public Long getDaysUntilConcert() {
+        return ChronoUnit.DAYS.between(LocalDate.now(), date);
     }
 }

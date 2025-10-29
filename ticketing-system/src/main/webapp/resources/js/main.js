@@ -3,7 +3,7 @@ const concertsPerPage = 3;
 let concerts = concertsData;
 let totalPages = Math.ceil(concerts.length / concertsPerPage);
 
-const container = document.getElementById("concert-list");
+const concertContainer = document.getElementById("concert-list");
 const pageDots = document.getElementById('page-dots');
 const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');
@@ -25,15 +25,30 @@ function render(page) {
     let html = `<div class="concerts">`;
     for (let i = start; i < end; i++) {
         const c = concerts[i];
+        let days = '지난 공연';
+        if (!c.disable) {
+            days = 'D-' + c.days;
+        }
         html += `
             <div class="concert">
-                <img src="${c.imageUrl}" alt="${c.title}">
-                <div class="title">${c.title}</div>
+                <div class="image-container">
+                    <img src="${c.imageUrl}" alt="${c.title}">
+                    <div class="overlay">
+                        <div class="days">${days}</div>
+                        <a href="${contextPath}/concert/${c.id}" class="book-btn ${c.disable ? 'disabled' : ''}">예매하기</a>
+                        <div class="seat-status">
+                            ${c.soldCount}/${c.totalCount}
+                        </div>
+                    </div>
+                </div>
+                <div class="title">
+                    <span data-text="${c.title}">${c.title}</span>
+                </div>
             </div>`;
     }
     html += `</div>`;
 
-    container.innerHTML = html;
+    concertContainer.innerHTML = html;
 
     document.querySelectorAll('.page-dots .dot').forEach((dot, idx) => {
         dot.classList.toggle('active', idx === page);
@@ -58,3 +73,18 @@ prevBtn.addEventListener('click', () => {
 nextBtn.addEventListener('click', () => {
     if (currentPage < totalPages - 1) goToPage(currentPage + 1);
 });
+
+document.querySelectorAll('.concert').forEach(concert => {
+    const titleSpan = concert.querySelector('.title span');
+    const titleWidth = titleSpan.scrollWidth;
+    const containerWidth = concert.querySelector('.title').offsetWidth;
+
+    if (titleWidth > containerWidth) {
+        concert.addEventListener('mouseenter', () => {
+            concert.classList.add('hover');
+        });
+        concert.addEventListener('mouseleave', () => {
+            concert.classList.remove('hover');
+        });
+    }
+})

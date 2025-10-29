@@ -1,14 +1,18 @@
 package org.example.dao;
 
 import org.example.model.Concert;
+import org.example.model.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ConcertDAO {
@@ -16,19 +20,9 @@ public class ConcertDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public List<Concert> findAll() {
-        String sql = "SELECT id, title, image_url FROM concerts";
-        return jdbcTemplate.query(sql, new ConcertRowMapper());
-    }
-
-    private static class ConcertRowMapper implements RowMapper<Concert> {
-        @Override
-        public Concert mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Concert(
-                    rs.getInt("id"),
-                    rs.getString("title"),
-                    rs.getString("image_url")
-            );
-        }
+    public Optional<Concert> findById(Long id) {
+        String sql = "SELECT * FROM concerts WHERE id = ?";
+        List<Concert> list = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Concert.class), id);
+        return list.stream().findFirst();
     }
 }
