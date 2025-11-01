@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiPayment {
+public class IMPPayment {
     private Long reservationId;
     private int paidAmount;
     private String type;
-    private String transactionId;
+    private String impUid;
 }

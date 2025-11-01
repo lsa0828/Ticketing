@@ -21,9 +21,9 @@ const pointNotice = document.getElementById('pointNotice');
 const useIMPBtn = document.getElementById('useIMPBtn');
 
 // 상태
-let selectedCoupon = null; // {type: 'COUPON', amount: 0, extraData: {memberCouponId: 1}}
+let selectedCoupon = null; // {type: 'COUPON', amount: 0, extraData: {memberCouponId: 0}}
 let selectedPoint = null; // {type: 'POINT', amount: 0, extraData: null}
-let selectedIMP = null; // {type: 'IMP', amount: 0, extraData: {transactionId: 1}}}
+let selectedIMP = null; // {type: 'IMP', amount: 0, extraData: {impUid: abc}}}
 
 priceContent.textContent = priceInt.toLocaleString() + '원';
 realPaymentAmount.textContent = priceInt.toLocaleString() + '원 결제';
@@ -52,7 +52,7 @@ function resetCouponSelection() {
 function openCouponSelection() {
     useCouponBtn.classList.add('selected');
     couponContainer.style.display = 'block';
-    selectedCoupon = {type: 'COUPON', amount: 0, extraData: {memberCouponId: ''}};
+    selectedCoupon = {type: 'COUPON', amount: 0, extraData: {memberCouponId: 0}};
 }
 
 function unselectCoupon() {
@@ -68,7 +68,7 @@ couponList.addEventListener('click', (e) => {
 
     if (target.dataset.id === selectedCoupon.extraData.id) {
         target.classList.remove('selected');
-        selectedCoupon = {type: 'COUPON', amount: 0, extraData: {memberCouponId: ''}};
+        selectedCoupon = {type: 'COUPON', amount: 0, extraData: {memberCouponId: 0}};
         unselectCoupon();
     } else {
         document.querySelectorAll('.coupon-item').forEach(item => {
@@ -76,7 +76,7 @@ couponList.addEventListener('click', (e) => {
             else item.classList.remove('selected');
         })
         const discountedPrice = parseInt(target.dataset.discountedPrice, 10);
-        selectedCoupon = {type: 'COUPON', amount: priceInt - discountedPrice, extraData: {memberCouponId: target.dataset.id}};
+        selectedCoupon = {type: 'COUPON', amount: priceInt - discountedPrice, extraData: {memberCouponId: parseInt(target.dataset.id, 10)}};
         couponNotice.textContent = `선택된 쿠폰: ${target.dataset.name}`;
         priceContent.classList.add('discounted');
         discountedPriceContent.textContent = discountedPrice.toLocaleString() + '원';
@@ -120,7 +120,7 @@ useIMPBtn.addEventListener('click', () => {
         useIMPBtn.classList.remove('selected');
     } else {
         useIMPBtn.classList.add('selected');
-        selectedIMP = {type: 'IMP', amount: 0, extraData: {transactionId: '1'}};
+        selectedIMP = {type: 'IMP', amount: 0, extraData: {impUid: '1'}};
     }
     checkTotalAmount();
 });
@@ -146,7 +146,34 @@ function checkTotalAmount() {
 
 function getPaymentDetails() {
     return [selectedCoupon, selectedPoint, selectedIMP]
-        .filter(sel => sel && (sel.amount > 0 || sel.type === 'IMP'));
+        .filter(sel => sel && (sel.amount > 0));
+}
+
+function payWithIMP() {
+    return new Promise((resolve, reject) => {
+        const merchant_uid = 'order_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+        IMP.init('imp87554144'); // 발급받은 가맹점 식별코드
+        IMP.request_pay({
+            pg: 'kakaopay.TC0ONETIME', // PG사 코드
+            pay_method: 'card',
+            merchant_uid: merchant_uid, // 주문번호
+            name: '공연 예매 티켓',
+            amount: selectedIMP.amount,
+            buyer_email: 'user@example.com',
+            buyer_name: '홍길동',
+            buyer_tel: '010-1234-5678',
+            buyer_addr: '서울특별시 강남구 삼성동',
+            buyer_postcode: '123-456'
+        }, function (rsp) {
+            if (rsp.success) {
+                selectedIMP.extraData.impUid = rsp.imp_uid;
+                resolve(rsp); // 결제 성공
+            } else {
+                alert('결제가 실패했습니다.: ' + rsp.error_msg);
+                reject(new Error(rsp.error_msg)); // 결제 실패
+            }
+        });
+    });
 }
 
 paymentBtn.addEventListener('click', async () => {
@@ -155,6 +182,11 @@ paymentBtn.addEventListener('click', async () => {
         return;
     }
     try {
+        const remaining = getRemainingAmount();
+        if (selectedIMP && remaining > 0) {
+            selectedIMP = {type: 'IMP', amount: remaining, extraData: {impUid: null}};
+            await payWithIMP();
+        }
         const response = await fetch(`${contextPath}/reserve`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},

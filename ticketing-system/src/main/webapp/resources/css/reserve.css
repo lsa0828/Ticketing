@@ -273,7 +273,7 @@ hr {
         align-items: flex-start;
     }
     .img-container {
-        width: 90%;
+        width: 100%;
         display: flex;
         justify-content: center;
         aspect-ratio: 2 / 1;

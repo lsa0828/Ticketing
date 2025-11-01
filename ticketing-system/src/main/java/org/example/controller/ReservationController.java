@@ -64,7 +64,7 @@ public class ReservationController {
         paymentRequest.setMemberId(member.getId());
 
         try {
-            Long reservationId = reservationService.payAndReserve(paymentRequest);
+            Long reservationId = reservationService.reserve(paymentRequest);
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(Map.of("reservationId", reservationId));
