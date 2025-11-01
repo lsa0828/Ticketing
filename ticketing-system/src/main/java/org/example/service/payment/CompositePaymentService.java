@@ -48,6 +48,7 @@ public class CompositePaymentService implements PaymentStrategy {
             if (strategy == null) {
                 throw new IllegalArgumentException("지원하지 않는 결제 방식입니다.");
             }
+            if (detail.getAmount() <= 0) continue;
             System.out.println("결제 진행 중: " + detail.getType().getDisplayName());
             PaymentRequestDTO requestDTO = new PaymentRequestDTO();
             requestDTO.setMemberId(request.getMemberId());
@@ -55,10 +56,6 @@ public class CompositePaymentService implements PaymentStrategy {
             requestDTO.setSeatId(request.getSeatId());
             requestDTO.setReservationId(request.getReservationId());
             requestDTO.setTotalAmount(request.getTotalAmount());
-
-            if (detail.getType() == PaymentType.COUPON || detail.getType() == PaymentType.POINT) {
-                if (detail.getAmount() <= 0) continue;
-            }
             requestDTO.setPaymentDetails(List.of(detail));
 
             PaymentResultDTO result = strategy.pay(requestDTO);
@@ -68,6 +65,10 @@ public class CompositePaymentService implements PaymentStrategy {
 
             results.add(result);
             request.setTotalAmount(result.getTotalAmount());
+        }
+
+        if (request.getTotalAmount() != 0) {
+            throw new RuntimeException(String.format("결제 금액 불일치: 오차(%d)", request.getTotalAmount()));
         }
 
         List<PaymentDetail> mergedDetails = results.stream()

@@ -24,6 +24,9 @@
     <context:component-scan base-package="org.example.interceptor" />
     <context:component-scan base-package="org.example.scheduler" />
 
+    <context:property-placeholder location="classpath:application.properties, classpath:application-secret.properties"
+        ignore-unresolvable="true"/>
+
     <tx:annotation-driven transaction-manager="transactionManager" />
 
     <!-- JSP ViewResolver setting -->
