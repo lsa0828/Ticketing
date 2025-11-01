@@ -23,13 +23,13 @@ public class ReservationViewDAO {
                     s.section, s.number,
                     co.name AS coupon_name,
                     pp.amount AS point_amount,
-                    ap.paid_amount,
+                    ip.paid_amount,
                     r.status AS reservation_status, r.reserved_at
                 FROM reservations r
                 JOIN concerts c ON r.concert_id = c.id
                 JOIN venues v ON c.venue_id = v.id
                 JOIN seats s ON r.seat_id = s.id
-                LEFT JOIN api_payments ap ON ap.reservation_id = r.id
+                LEFT JOIN imp_payments ip ON ip.reservation_id = r.id
                 LEFT JOIN point_payments pp ON pp.reservation_id = r.id
                 LEFT JOIN coupon_payments cp ON cp.reservation_id = r.id
                 LEFT JOIN member_coupons mc ON mc.id = cp.member_coupon_id

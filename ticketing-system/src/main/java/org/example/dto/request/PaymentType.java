@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum PaymentType {
     POINT("포인트"),
     COUPON("쿠폰"),
-    IMP("아임포트");
+    IMP("아임포트"),
+    KAKAOPAY("kakaopay");
 
     private final String displayName;
 

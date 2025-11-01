@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="<c:url value='/resources/css/layout.css' />">
     <link rel="stylesheet" href="<c:url value='/resources/css/reserve.css' />">
+    <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 </head>
 <body>
     <%@ include file="/WEB-INF/views/common/header.jspf" %>

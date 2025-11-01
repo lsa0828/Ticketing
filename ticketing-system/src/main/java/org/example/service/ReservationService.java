@@ -48,7 +48,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public Long payAndReserve(PaymentRequestDTO paymentRequest) {
+    public Long reserve(PaymentRequestDTO paymentRequest) {
         Long memberId = paymentRequest.getMemberId();
         Long concertId = paymentRequest.getConcertId();
         Long seatId = paymentRequest.getSeatId();
