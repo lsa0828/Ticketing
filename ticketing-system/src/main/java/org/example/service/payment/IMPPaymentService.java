@@ -63,7 +63,7 @@ public class IMPPaymentService implements PaymentStrategy {
     }
 
     @Override
-    public boolean refund(Long memberId, Long reservationId) {
+    public void refund(Long memberId, Long reservationId) {
         Optional<IMPPayment> impPayment = IMPPaymentDAO.findByReservationId(reservationId);
         if (impPayment.isPresent()) {
             try {
@@ -74,6 +74,5 @@ public class IMPPaymentService implements PaymentStrategy {
                 throw new RuntimeException("아임포트 환불 요청 중 오류 발생", e);
             }
         }
-        return true;
     }
 }

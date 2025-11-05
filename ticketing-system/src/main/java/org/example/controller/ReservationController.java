@@ -3,7 +3,7 @@ package org.example.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.example.dto.ReservedConcertDTO;
-import org.example.dto.ReservedConcertDetailDTO;
+import org.example.dto.response.ReservedConcertDetailDTO;
 import org.example.dto.response.MemberResponseDTO;
 import org.example.dto.request.PaymentRequestDTO;
 import org.example.service.*;

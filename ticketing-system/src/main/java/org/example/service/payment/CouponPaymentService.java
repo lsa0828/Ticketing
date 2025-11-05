@@ -60,18 +60,17 @@ public class CouponPaymentService implements PaymentStrategy {
     }
 
     @Override
-    public boolean refund(Long memberId, Long reservationId) {
+    public void refund(Long memberId, Long reservationId) {
         Optional<CouponPayment> couponPaymentOptional = couponPaymentDAO.findByReservationId(reservationId);
         if (couponPaymentOptional.isPresent()) {
             CouponPayment couponPayment = couponPaymentOptional.get();
             LocalDate expiresAt = memberCouponDAO.getExpiresAt(couponPayment.getMemberCouponId(), memberId);
             if (expiresAt.isAfter(LocalDate.now())) {
-                int updated = memberCouponDAO.updateToNotUsed(couponPayment.getMemberCouponId());
-                return updated == 1;
-            } else {
-                return false;
+                int update = memberCouponDAO.updateToNotUsed(couponPayment.getMemberCouponId());
+                if (update != 1) {
+                    throw new IllegalStateException("쿠폰 환불 실패");
+                }
             }
         }
-        return true;
     }
 }

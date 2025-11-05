@@ -1,4 +1,4 @@
-package org.example.dto;
+package org.example.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +20,7 @@ public class ReservedConcertDetailDTO {
     private String section;
     private int number;
     private String couponName;
+    private LocalDate couponExpiresAt;
     private int point;
     private int paidPrice;
     private String reservationStatus;

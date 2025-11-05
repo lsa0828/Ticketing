@@ -3,7 +3,7 @@ package org.example.service;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dao.*;
 import org.example.dto.ReservedConcertDTO;
-import org.example.dto.ReservedConcertDetailDTO;
+import org.example.dto.response.ReservedConcertDetailDTO;
 import org.example.dto.request.PaymentRequestDTO;
 import org.example.dto.SeatDTO;
 import org.example.dto.response.PaymentResultDTO;
@@ -97,10 +97,7 @@ public class ReservationService {
             throw new IllegalStateException("이미 환불된 결제입니다.");
         }
 
-        boolean refundableCoupon = compositePaymentService.refund(memberId, reservationId);
-        if (!refundableCoupon) {
-            throw new IllegalStateException("사용한 쿠폰 기한이 만료되어 환불할 수 없습니다.");
-        }
+        compositePaymentService.refund(memberId, reservationId);
 
         reservationDAO.updateStatusToRefunded(reservationId);
         seatReservationDAO.updateSeatToAvailable(reservation.getConcertId(), reservation.getSeatId());
