@@ -35,16 +35,18 @@ public class ReservationService {
     private ReservationViewDAO reservationViewDAO;
 
     @Transactional
-    public SeatDTO updateSeatReservation(Long seatId, Long concertId, Long memberId) {
+    public void selectSeat(Long seatId, Long concertId, Long memberId) {
         checkConcert(concertId);
-
-        seatReservationDAO.releaseSeatForOtherMember(seatId, concertId, memberId);
 
         int updated = seatReservationDAO.updateSeatToBooking(seatId, concertId, memberId);
         if (updated == 0) {
             throw new OptimisticLockingFailureException("이미 선택된 좌석입니다.");
         }
-        return seatViewDAO.getSeat(seatId, concertId);
+        seatReservationDAO.releaseSeatForOtherMember(seatId, concertId, memberId);
+    }
+
+    public SeatDTO getSelectedSeat(Long seatId, Long concertId, Long memberId) {
+        return seatViewDAO.getBookingSeat(seatId, concertId, memberId);
     }
 
     @Transactional

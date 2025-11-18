@@ -187,7 +187,7 @@ paymentBtn.addEventListener('click', async () => {
             selectedIMP = {type: 'IMP', amount: remaining, extraData: {impUid: null}};
             await payWithIMP();
         }
-        const response = await fetch(`${contextPath}/reserve`, {
+        const response = await fetch(`${contextPath}/api/reserve`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({

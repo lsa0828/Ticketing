@@ -3,6 +3,9 @@ package org.example.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.example.dto.ReservedConcertDTO;
+import org.example.dto.SeatDTO;
+import org.example.dto.request.SelectedSeatDTO;
+import org.example.dto.request.TestSelectedSeatDTO;
 import org.example.dto.response.ReservedConcertDetailDTO;
 import org.example.dto.response.MemberResponseDTO;
 import org.example.dto.request.PaymentRequestDTO;
@@ -30,6 +33,48 @@ public class ReservationController {
     @Autowired
     private ReservationFacadeService reservationFacadeService;
 
+    @PostMapping("/api/select-seat")
+    public ResponseEntity<?> selectSeat(@RequestBody SelectedSeatDTO seatDTO, HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        MemberResponseDTO member = (MemberResponseDTO) session.getAttribute("loginMember");
+
+        try {
+            reservationService.selectSeat(seatDTO.getSeatId(), seatDTO.getConcertId(), member.getId());
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(seatDTO);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("error", e.getMessage()));
+        } catch (OptimisticLockingFailureException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("error", "예매 중 오류가 발생했습니다."));
+        }
+    }
+
+    // 테스트용 API
+    @PostMapping("/api/test/select-seat")
+    public ResponseEntity<?> testSelectSeat(@RequestBody TestSelectedSeatDTO seatDTO) {
+        try {
+            reservationService.selectSeat(
+                    seatDTO.getSeatId(),
+                    seatDTO.getConcertId(),
+                    seatDTO.getMemberId()
+            );
+            return ResponseEntity.ok(Map.of("seatId", seatDTO.getSeatId()));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        } catch (OptimisticLockingFailureException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @GetMapping("/reserve")
     public String reserveSeat(@RequestParam("seatId") Long seatId, @RequestParam("concertId") Long concertId,
                               HttpServletRequest request, RedirectAttributes redirectAttributes, Model model) {
@@ -56,7 +101,7 @@ public class ReservationController {
         }
     }
 
-    @PostMapping("/reserve")
+    @PostMapping("/api/reserve")
     public ResponseEntity<?> reserveAfterPay(@RequestBody PaymentRequestDTO paymentRequest, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         MemberResponseDTO member = (MemberResponseDTO) session.getAttribute("loginMember");

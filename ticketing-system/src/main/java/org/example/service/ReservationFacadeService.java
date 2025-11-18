@@ -25,7 +25,7 @@ public class ReservationFacadeService {
     @Transactional
     public ReservationData reserve(Long seatId, Long concertId, Long memberId) {
         ConcertVenueDTO concert = concertService.getConcertVenue(concertId);
-        SeatDTO seat = reservationService.updateSeatReservation(seatId, concertId, memberId);
+        SeatDTO seat = reservationService.getSelectedSeat(seatId, concertId, memberId);
         List<CouponAppliedPriceDTO> coupons = couponService.getAvailableCoupon(memberId, seat.getPrice());
         int point = memberService.getPoint(memberId);
         return new ReservationData(concert, seat, point, coupons);
