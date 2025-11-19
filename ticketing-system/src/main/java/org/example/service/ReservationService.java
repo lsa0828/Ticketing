@@ -3,7 +3,7 @@ package org.example.service;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dao.*;
 import org.example.dto.ReservedConcertDTO;
-import org.example.dto.ReservedConcertDetailDTO;
+import org.example.dto.response.ReservedConcertDetailDTO;
 import org.example.dto.request.PaymentRequestDTO;
 import org.example.dto.SeatDTO;
 import org.example.dto.response.PaymentResultDTO;
@@ -35,16 +35,18 @@ public class ReservationService {
     private ReservationViewDAO reservationViewDAO;
 
     @Transactional
-    public SeatDTO updateSeatReservation(Long seatId, Long concertId, Long memberId) {
+    public void selectSeat(Long seatId, Long concertId, Long memberId) {
         checkConcert(concertId);
-
-        seatReservationDAO.releaseSeatForOtherMember(seatId, concertId, memberId);
 
         int updated = seatReservationDAO.updateSeatToBooking(seatId, concertId, memberId);
         if (updated == 0) {
             throw new OptimisticLockingFailureException("이미 선택된 좌석입니다.");
         }
-        return seatViewDAO.getSeat(seatId, concertId);
+        seatReservationDAO.releaseSeatForOtherMember(seatId, concertId, memberId);
+    }
+
+    public SeatDTO getSelectedSeat(Long seatId, Long concertId, Long memberId) {
+        return seatViewDAO.getBookingSeat(seatId, concertId, memberId);
     }
 
     @Transactional
@@ -97,10 +99,7 @@ public class ReservationService {
             throw new IllegalStateException("이미 환불된 결제입니다.");
         }
 
-        boolean refundableCoupon = compositePaymentService.refund(memberId, reservationId);
-        if (!refundableCoupon) {
-            throw new IllegalStateException("사용한 쿠폰 기한이 만료되어 환불할 수 없습니다.");
-        }
+        compositePaymentService.refund(memberId, reservationId);
 
         reservationDAO.updateStatusToRefunded(reservationId);
         seatReservationDAO.updateSeatToAvailable(reservation.getConcertId(), reservation.getSeatId());

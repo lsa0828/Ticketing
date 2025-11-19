@@ -5,5 +5,5 @@ import org.example.dto.response.PaymentResultDTO;
 
 public interface PaymentStrategy {
     PaymentResultDTO pay(PaymentRequestDTO request);
-    boolean refund(Long memberId, Long reservationId);
+    void refund(Long memberId, Long reservationId);
 }

@@ -70,14 +70,35 @@
             });
         });
 
-        document.querySelector('.book-btn').addEventListener('click', () => {
+        document.querySelector('.book-btn').addEventListener('click', async () => {
             if (!selectedSeat) {
                 alert('좌석을 선택해주세요.');
                 return;
             }
             const seatId = selectedSeat.dataset.seatId;
             const concertId = selectedSeat.dataset.concertId;
-            window.location.href = `${contextPath}/reserve?seatId=\${seatId}&concertId=\${concertId}`;
+            try {
+                const response = await fetch(`${contextPath}/api/select-seat`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        seatId: seatId,
+                        concertId: concertId
+                    })
+                });
+                if (!response.ok) {
+                    const err = await response.json();
+                    alert(err.error || '결제 중 오류가 발생했습니다.');
+                    return;
+                }
+                const data = await response.json();
+                if (data.seatId != null && data.concertId != null) {
+                    window.location.href = `${contextPath}/reserve?seatId=\${data.seatId}&concertId=\${data.concertId}`;
+                }
+            } catch (err) {
+                console.error(err);
+                alert('결제 중 오류가 발생했습니다.');
+            }
         });
     </script>
     <c:if test="${not empty error}">

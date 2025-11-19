@@ -32,7 +32,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
 
         String uri = request.getRequestURI();
-        if (uri.equals(request.getContextPath() + "/login") || uri.equals(request.getContextPath() + "/register")) {
+        String path = uri.substring(request.getContextPath().length());
+        if (path.equals("/login") ||
+                path.equals("/register") ||
+                path.startsWith("/api/test/")) {
             return true;
         }
 

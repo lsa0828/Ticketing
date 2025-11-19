@@ -43,11 +43,13 @@ public class PointPaymentService implements PaymentStrategy {
     }
 
     @Override
-    public boolean refund(Long memberId, Long reservationId) {
+    public void refund(Long memberId, Long reservationId) {
         int amount = pointPaymentDAO.findByReservationId(reservationId);
         if (amount > 0) {
-            memberDAO.plusPoint(memberId, amount);
+            int update = memberDAO.plusPoint(memberId, amount);
+            if (update != 1) {
+                throw new IllegalStateException("포인트 환불 실패");
+            }
         }
-        return true;
     }
 }

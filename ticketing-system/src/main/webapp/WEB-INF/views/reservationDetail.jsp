@@ -68,8 +68,19 @@
         const price = parseInt('${c.paidPrice}', 10);
         document.querySelector('.price').textContent = price.toLocaleString() + '원';
 
+        const couponExpiresAt = '${empty c.couponExpiresAt ? "" : c.couponExpiresAt}';
+
         function confirmCancel(reservationId) {
-            const confirmed = confirm("예매를 취소하시겠습니까?");
+            let couponInfo = '';
+
+            if (couponExpiresAt) {
+                const now = new Date();
+                const couponDate = couponExpiresAt ? new Date(couponExpiresAt) : null;
+                if (couponDate < now) {
+                    couponInfo = ` (단, 적용한 쿠폰의 만료 기한(${c.couponExpiresAt})이 지나 해당 쿠폰은 환불이 불가합니다.)`;
+                }
+            }
+            const confirmed = confirm("예매를 취소하시겠습니까?" + couponInfo);
             if (confirmed) {
                 window.location.href = `${contextPath}/refund?reservationId=\${reservationId}`;
             }

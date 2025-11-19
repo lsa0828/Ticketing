@@ -88,11 +88,9 @@ public class CompositePaymentService implements PaymentStrategy {
     }
 
     @Override
-    public boolean refund(Long memberId, Long reservationId) {
-        boolean refundableCoupon = paymentStrategies.get(PaymentType.COUPON).refund(memberId, reservationId);
-        if (!refundableCoupon) return false;
+    public void refund(Long memberId, Long reservationId) {
+        paymentStrategies.get(PaymentType.COUPON).refund(memberId, reservationId);
         paymentStrategies.get(PaymentType.POINT).refund(memberId, reservationId);
         paymentStrategies.get(PaymentType.IMP).refund(memberId, reservationId);
-        return true;
     }
 }
