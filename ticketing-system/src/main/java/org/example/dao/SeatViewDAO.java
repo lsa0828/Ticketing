@@ -33,10 +33,10 @@ public class SeatViewDAO {
         );
     }
 
-    public SeatDTO getSeat(Long seatId, Long concertId) {
+    public SeatDTO getBookingSeat(Long seatId, Long concertId, Long memberId) {
         String sql = "SELECT s.id, s.section, s.number, r.price "
                 + "FROM seat_reservations r JOIN seats s ON r.seat_id = s.id "
-                + "WHERE r.seat_id = ? AND r.concert_id = ?";
+                + "WHERE r.seat_id = ? AND r.concert_id = ? AND r.member_id = ? AND status = 'BOOKING'";
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) ->
                 new SeatDTO(
                         rs.getLong("id"),
@@ -44,7 +44,7 @@ public class SeatViewDAO {
                         rs.getInt("number"),
                         rs.getInt("price")
                 ),
-                seatId, concertId
+                seatId, concertId, memberId
         );
     }
 }

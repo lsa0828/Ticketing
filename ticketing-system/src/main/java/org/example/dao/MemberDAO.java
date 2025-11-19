@@ -50,12 +50,12 @@ public class MemberDAO {
         return jdbcTemplate.update(sql, amount, memberId, amount);
     }
 
-    public void plusPoint(Long memberId, int amount) {
+    public int plusPoint(Long memberId, int amount) {
         String sql = """
                 UPDATE members
                 SET point = point + ?
                 WHERE id = ?
                 """;
-        jdbcTemplate.update(sql, amount, memberId);
+        return jdbcTemplate.update(sql, amount, memberId);
     }
 }

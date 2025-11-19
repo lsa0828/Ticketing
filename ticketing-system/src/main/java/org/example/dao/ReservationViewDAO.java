@@ -1,7 +1,7 @@
 package org.example.dao;
 
 import org.example.dto.ReservedConcertDTO;
-import org.example.dto.ReservedConcertDetailDTO;
+import org.example.dto.response.ReservedConcertDetailDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,7 +21,7 @@ public class ReservationViewDAO {
                     c.title, c.date, c.image_url,
                     v.name AS venue_name,
                     s.section, s.number,
-                    co.name AS coupon_name,
+                    co.name AS coupon_name, co.expires_at AS coupon_expires_at,
                     pp.amount AS point_amount,
                     ip.paid_amount,
                     r.status AS reservation_status, r.reserved_at
@@ -46,6 +46,7 @@ public class ReservationViewDAO {
                         rs.getString("section"),
                         rs.getInt("number"),
                         rs.getString("coupon_name"),
+                        rs.getObject("coupon_expires_at", LocalDate.class),
                         rs.getInt("point_amount"),
                         rs.getInt("paid_amount"),
                         rs.getString("reservation_status"),
