@@ -5,11 +5,21 @@
            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- MySQL DataSource -->
+    <!--
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://localhost:3306/ticketingdb?serverTimezone=UTC"/>
         <property name="username" value="root"/>
         <property name="password" value="root"/>
+    </bean>
+    -->
+
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/ticketingdb?serverTimezone=UTC"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+        <property name="maximumPoolSize" value="20" />
     </bean>
 
     <!-- JdbcTemplate -->
