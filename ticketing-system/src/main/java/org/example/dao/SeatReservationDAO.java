@@ -74,7 +74,7 @@ public class SeatReservationDAO {
                 SET status = 'BOOKING', member_id = ?, booking_time = NOW(), expires_at = DATE_ADD(NOW(), INTERVAL 15 MINUTE), version = version + 1
                 WHERE concert_id = ? AND seat_id = ?
                 """;
-        return jdbcTemplate.update(sql, memberId, concertId, seatId, memberId);
+        return jdbcTemplate.update(sql, memberId, concertId, seatId);
     }
 
     public void releaseSeatForOtherMember(Long seatId, Long concertId, Long memberId) {

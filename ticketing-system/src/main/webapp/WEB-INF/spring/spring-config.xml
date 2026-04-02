@@ -19,7 +19,11 @@
         <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/ticketingdb?serverTimezone=UTC"/>
         <property name="username" value="root"/>
         <property name="password" value="root"/>
-        <property name="maximumPoolSize" value="20" />
+        <property name="maximumPoolSize" value="8" />
+        <!--<property name="minimumIdle" value="10" />
+        <property name="connectionTimeout" value="3000" />
+        <property name="idleTimeout" value="30000" />
+        <property name="maxLifetime" value="1800000" />-->
     </bean>
 
     <!-- JdbcTemplate -->
@@ -30,6 +34,23 @@
     <!-- Transaction Manager -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- Redis Connection Factory -->
+    <bean id="redisConnectionFactory" class="org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory">
+        <constructor-arg value="localhost" />
+        <constructor-arg type="int" value="6379" />
+    </bean>
+
+    <!-- RedisTemplate -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="redisConnectionFactory" />
+        <property name="keySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+        </property>
+        <property name="valueSerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+        </property>
     </bean>
 
 </beans>

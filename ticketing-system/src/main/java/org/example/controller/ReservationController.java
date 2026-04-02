@@ -1,9 +1,9 @@
 package org.example.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.example.dto.ReservedConcertDTO;
-import org.example.dto.SeatDTO;
 import org.example.dto.request.SelectedSeatDTO;
 import org.example.dto.request.TestSelectedSeatDTO;
 import org.example.dto.response.ReservedConcertDetailDTO;
@@ -32,6 +32,8 @@ public class ReservationController {
     private ReservationService reservationService;
     @Autowired
     private ReservationFacadeService reservationFacadeService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @PostMapping("/api/select-seat")
     public ResponseEntity<?> selectSeat(@RequestBody SelectedSeatDTO seatDTO, HttpServletRequest request) {
@@ -70,11 +72,7 @@ public class ReservationController {
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(Map.of("seatId", seatDTO.getSeatId()));
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(Map.of("error", e.getMessage()));
-        } catch (OptimisticLockingFailureException e) {
+        } catch (IllegalStateException | OptimisticLockingFailureException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(Map.of("error", e.getMessage()));
@@ -84,6 +82,26 @@ public class ReservationController {
                     .body(Map.of("error", e.getMessage()));
         }
     }
+/*
+    // 테스트용 API
+    @PostMapping("/api/test/select-seat")
+    public ResponseEntity<?> testSelectSeatKafka(@RequestBody TestSelectedSeatDTO seatDTO) {
+        try {
+            String json = objectMapper.writeValueAsString(seatDTO);
+            seatSelectProducer.sendSeatSelectEvent(seatDTO.getConcertId(), seatDTO.getSeatId(), json);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("message", "seat request accepted"));
+        } catch (IllegalStateException | OptimisticLockingFailureException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }*/
 
     @GetMapping("/reserve")
     public String reserveSeat(@RequestParam("seatId") Long seatId, @RequestParam("concertId") Long concertId,

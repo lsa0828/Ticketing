@@ -12,11 +12,13 @@ import org.example.model.Reservation;
 import org.example.service.payment.CompositePaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -33,15 +35,27 @@ public class ReservationService {
     private ReservationDAO reservationDAO;
     @Autowired
     private ReservationViewDAO reservationViewDAO;
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Transactional
     public void selectSeat(Long seatId, Long concertId, Long memberId) {
         checkConcert(concertId);
-        // int updated = seatReservationDAO.updateSeatToBooking(seatId, concertId, memberId);
-        int updated = seatReservationDAO.updateSeatToBookingOptimistic(seatId, concertId, memberId);
-        // int updated = seatReservationDAO.updateSeatToBookingPessimistic(seatId, concertId, memberId);
-        if (updated == 0) {
-            throw new OptimisticLockingFailureException("이미 선택된 좌석입니다.");
+
+        String lockKey = "seat_lock:" + concertId + ":" + seatId;
+        Boolean acquired = redisTemplate.opsForValue().setIfAbsent(lockKey, memberId.toString(), 15, TimeUnit.MINUTES);
+        if (Boolean.FALSE.equals(acquired)) {
+            throw new IllegalStateException("이미 다른 사용자가 선택 중인 좌석입니다.");
+        }
+        try {
+            // int updated = seatReservationDAO.updateSeatToBooking(seatId, concertId, memberId);
+            int updated = seatReservationDAO.updateSeatToBookingOptimistic(seatId, concertId, memberId);
+            // int updated = seatReservationDAO.updateSeatToBookingPessimistic(seatId, concertId, memberId);
+            if (updated == 0) {
+                throw new OptimisticLockingFailureException("이미 선택된 좌석입니다.");
+            }
+        } finally {
+            redisTemplate.delete(lockKey);
         }
         /*더 빨리 끝나는 트랜잭션 발생 -> 트랜잭션 타이밍 뒤엉켜 경쟁 유발
         seatReservationDAO.releaseSeatForOtherMember(seatId, concertId, memberId);*/
